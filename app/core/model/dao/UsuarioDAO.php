@@ -49,6 +49,18 @@ final class UsuarioDAO extends DAO implements InterfaceDAO
         return array();
     }
 
+    public function emailCheck($email): string
+    {
+        $sql = "SELECT usuario.id FROM {$this->table} WHERE usuario.email = '{$email}'";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchColumn();
+        if($resultado === false){
+            $resultado = NULL;
+        }
+        return $resultado;
+    }
+
 }
 
 
