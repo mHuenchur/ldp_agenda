@@ -9,7 +9,7 @@ final class Authentication{
     public static function login($user, $pass): void{
         //validar formato del usuario y contraseña
         $conn = Connection::get();
-        $sql = "SELECT CONCAT(usuario.nombre,', ',apellido) AS usuario, id, nombre_usuario, clave, email FROM `usuario` WHERE `nombre_usuario` = :nombreUsuario"; 
+        $sql = "SELECT CONCAT(usuario.nombre,', ',apellido) AS usuario, id, nombre_usuario, email, clave FROM `usuario` WHERE `nombre_usuario` = :nombreUsuario"; 
         $stmt = $conn->prepare($sql);
         if(!$stmt->execute(["nombreUsuario" => $user])){
             throw new \Exception("No se pudo <i>ejecutar</i> la consulta");
@@ -28,7 +28,8 @@ final class Authentication{
         //se crean las variables de sessión
         $_SESSION["token"] = APP_TOKEN;
         $_SESSION["usuario"] = $cuenta->usuario;
-        //$_SESSION["perfil"] = $cuenta->perfil;
+        //HARCODED
+        $_SESSION["perfil"] = "usuario";
 
     }
 
