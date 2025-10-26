@@ -21,6 +21,7 @@ final class UsuarioController extends Controller implements InterfaceController{
     public function index(Request $request, Response $response): void{
         //$service = new UsuarioService();
         //$listado = $service->list();
+        
         $this->view = "usuario/index.php";
         require_once APP_TEMPLATE . "template.php";
     }
