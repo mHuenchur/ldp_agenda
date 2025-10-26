@@ -39,8 +39,8 @@ let autenticacionController = {
 
     },
     login: () =>{
-        let formUsuario = document.getElementById("datoUsuario");
-        let formClave = document.getElementById("datoClave");
+        let formUsuario = document.getElementById("datoUsuarioLogin");
+        let formClave = document.getElementById("datoClaveLogin");
         autenticacionController.dataUsuario.nombreUsuario = formUsuario.value;
         autenticacionController.dataUsuario.clave = formClave.value;
 
@@ -50,13 +50,31 @@ let autenticacionController = {
                 //console.log("Respuesta del servidor", response)
                 window.location.href = response.controlador + "/index";
             }else{
+                console.log(response.error);
+                /*
                 const toastLiveExample = document.getElementById('liveToast')
                 const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
                 const message = document.getElementById("messageContainer");
                 message.innerHTML = response.error;
-                toastBootstrap.show()
+                toastBootstrap.show()*/
             }
         })
+    },
+    passwordReset: () => {
+        autenticacionController.dataUsuario.correo = document.getElementById("datoCorreo").value;
+        if (autenticacionController.dataUsuario.correo !== "") {
+            autenticacionService.passwordReset(autenticacionController.dataUsuario)
+            .then(response => {
+                if(response.error === ""){
+                    //autenticacionController.showMessage(response.mensaje);
+                    document.getElementById("datoCorreo").value = '';
+                }else{
+                    //autenticacionController.showMessage(response.error);
+                }
+            })
+        } else {
+            //autenticacionController.showMessage("Campos vacios!");
+        }
     },
 
     showMessage: (respuesta) => {
