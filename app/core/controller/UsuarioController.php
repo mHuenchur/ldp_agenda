@@ -57,4 +57,9 @@ final class UsuarioController extends Controller implements InterfaceController{
         header("refresh:2; url=" . APP_URL . "autenticacion/index");
         require_once APP_TEMPLATE . "template.php";
     }
+
+    public function perfil(): void{
+        $this->view = "usuario/perfil.php";
+        require_once APP_TEMPLATE . "template.php";
+    }
 }
