@@ -20,7 +20,7 @@ final class Request{
     public function getAction(): string{
         return $this->action;
     }
-    public function getId(): int{
+    public function getId(): string{
         return $this->id;
     }
     public function getData(): array{
