@@ -76,6 +76,23 @@ let autenticacionController = {
             //autenticacionController.showMessage("Campos vacios!");
         }
     },
+    resetPassword: () => {
+        //tomamos el valor en el input de clave
+        autenticacionController.dataUsuario.clave = document.getElementById("claveNueva").value;
+        autenticacionController.dataUsuario.valor = document.getElementById("key").value;
+        //lo enviamos al service
+        autenticacionService.resetPassword(autenticacionController.dataUsuario)
+        .then(response => {
+                if(response.error === ""){
+                    console.log("se cambio la contraseña en bd");
+                    //autenticacionController.showMessage(response.mensaje);
+                    //document.getElementById("datoCorreo").value = '';
+                }else{
+                    console.log("no se pudo cambiar");
+                    //autenticacionController.showMessage(response.error);
+                }
+            })
+    },
 
     showMessage: (respuesta) => {
         const toastLiveExample = document.getElementById('liveToast')
