@@ -33,15 +33,12 @@ final class UsuarioService extends Service implements InterfaceService{
     public function list(): array{
         return [];
     }
-    /*
-    public function emailCheck($email): string{
+
+    public function updatePassword($id, $clave){
+
         $conn = Connection::get();
         $dao = new UsuarioDAO($conn);
-        return $dao->emailCheck($email);
+        $dao->updatePassword($id, $clave);
     }
-    public function createPassword($email): string{
-        $conn = Connection::get();
-        $dao = new UsuarioDAO($conn);
-        return $dao->createPassword($email);
-    }*/
+    
 }
