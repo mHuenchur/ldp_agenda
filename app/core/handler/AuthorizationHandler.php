@@ -12,7 +12,7 @@ class AuthorizationHandler extends AbstractHandler{
         
         if(isset($_SESSION["token"]) && $_SESSION["token"] === APP_TOKEN){
             //print_r($request->getController());
-            $contAdmitidosUsuario = ["usuario","autenticacion"];
+            $contAdmitidosUsuario = ["usuario","autenticacion", "categoria", "contacto", "recordatorio"];
             $contAdmitidosAdministrador = ["autenticacion"];
 
             $response->setController($request->getController());
