@@ -45,4 +45,19 @@ final class PasswordService extends Service implements InterfaceService{
         $dao->create($id, $email, $token);
         return $token;
     }
+    public function validityCheck($token){
+        $conn = Connection::get();
+        $dao = new TokenDAO($conn);
+        return $dao->validityCheck($token);
+    }
+    public function findUser($token){
+        $conn = Connection::get();
+        $dao = new TokenDAO($conn);
+        return $dao->findUser($token);
+    }
+    public function usedToken($id){
+        $conn = Connection::get();
+        $dao = new TokenDAO($conn);
+        $dao->usedToken($id);
+    }
 }
