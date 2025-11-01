@@ -48,7 +48,7 @@ final class AutenticacionController extends Controller{
         $response->send();
     }
 
-    public function passwordLost(): void{
+    public function passwordLost(Request $request, Response $response): void{
         $this->view = "autenticacion/changePassword.php";
         require_once APP_TEMPLATE . "template.php";
     }
@@ -73,9 +73,37 @@ final class AutenticacionController extends Controller{
     }
 
     public function resetPage(Request $request, Response $response): void{
-        //verificamos que ese url aun este valido
-        //si esta valido deberia permitir utilizar 
-        $this->view = "autenticacion/resetPage.php";
+        //verificamos que ese url(token) aun este valido
+        $service = new PasswordService();
+        $token = $request->getId();
+        //si esta valido deberia permitir utilizar
+        //sino muestro pagina de invalido
+        if ($service->validityCheck($token)) {
+            $this->view = "autenticacion/resetPage.php";
+        } else {
+            $this->view = "autenticacion/errorPage.php";
+        }
         require_once APP_TEMPLATE . "template.php";
+    }
+
+    public function changePassword(Request $request, Response $response): void{
+        $service = new PasswordService();
+        $dato = $request->getData();
+        //si lo es modificamos la clave y consumimos el token
+        //sino, mensaje de error
+        if ($service->validityCheck($dato["valor"])) {
+            //encuentro usuraio por token
+            $id = $service->findUser($dato["valor"]);
+            //creo una instancia service usuario
+            $user = new UsuarioService();
+            //actualizo clave
+            $user->updatePassword($id, $dato["clave"]);
+            //consumo el token
+            $service->usedToken($id);
+            $response->setMessage("TODO JOYA");
+        } else {
+            $response->setMessage("TODO MAL");
+        }
+        $response->send();
     }
 }
