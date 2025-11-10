@@ -28,6 +28,7 @@ final class Authentication{
         //se crean las variables de sessión
         $_SESSION["token"] = APP_TOKEN;
         $_SESSION["usuario"] = $cuenta->usuario;
+        $_SESSION["id"] = $cuenta->id;
         //HARCODED
         $_SESSION["perfil"] = "usuario";
 
