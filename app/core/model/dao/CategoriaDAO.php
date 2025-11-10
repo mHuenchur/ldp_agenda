@@ -15,7 +15,12 @@ final class CategoriaDAO extends DAO implements InterfaceDAO
 
     public function save(InterfaceDTO $object): void
     {
+        $sql = "INSERT INTO {$this->table} VALUES (DEFAULT, :nombre, :usuario_id)";
+        $stmt = $this->conn->prepare($sql);
+        $data = $object->toArray();
+        unset($data["id"]);
 
+        $stmt->execute($data);
     }
 
     public function load($id): InterfaceDTO
