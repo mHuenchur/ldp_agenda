@@ -4,6 +4,7 @@ namespace app\core\controller;
 
 use app\core\controller\base\InterfaceController;
 use app\core\controller\base\Controller;
+use app\core\service\ContactoService;
 use app\libs\response\Response;
 use app\libs\request\Request;
 
@@ -12,7 +13,8 @@ final class ContactoController extends Controller implements InterfaceController
     public function __construct()
     {
         parent::__construct([
-            
+            "public/app/js/contacto/contactoController.js",
+            "public/app/js/contacto/contactoService.js"
         ]);
     }
     // BUSCA EL INICIO DE LA VISTA CORRESPONDIENTE
@@ -30,7 +32,12 @@ final class ContactoController extends Controller implements InterfaceController
     }
     // GESTIONA EL GUARDADO DE UNA NUEVA ENTIDAD EN EL SISTEMA
     public function save(Request $request, Response $response): void{
-
+        $service = new ContactoService();
+        $valores = $request->getData();
+        $valores["usuario"] = $_SESSION["id"];
+        $service->save($valores);
+        $response->setMessage("El contacto se registró correctamente");
+        $response->send();
     }
     // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function edit(Request $request, Response $response): void{
