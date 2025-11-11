@@ -19,6 +19,8 @@ final class CategoriaController extends Controller implements InterfaceControlle
     }
     // BUSCA EL INICIO DE LA VISTA CORRESPONDIENTE
     public function index(Request $request, Response $response): void{
+        $service = new CategoriaService();
+        $listadoCategorias = $service->list();
         $this->view = "categoria/index.php";
         require_once APP_TEMPLATE . "template.php";
     }
