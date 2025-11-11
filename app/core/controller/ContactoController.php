@@ -19,6 +19,8 @@ final class ContactoController extends Controller implements InterfaceController
     }
     // BUSCA EL INICIO DE LA VISTA CORRESPONDIENTE
     public function index(Request $request, Response $response): void{
+        $service = new ContactoService();
+        $listadoContactos = $service->list();
         $this->view = "contacto/index.php";
         require_once APP_TEMPLATE . "template.php";
     }
@@ -51,5 +53,11 @@ final class ContactoController extends Controller implements InterfaceController
     public function delete(Request $request, Response $response): void{
         
     }
+
+    public function filter(Request $request, Response $response): void{
+        $service = new ContactoService();
+        $service->filter($request->getData());
+    }
+
 
 }
