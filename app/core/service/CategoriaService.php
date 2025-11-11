@@ -32,7 +32,9 @@ final class CategoriaService extends Service implements InterfaceService{
     }
 
     public function list(): array{
-        return [];
+        $conn = Connection::get();
+        $dao = new CategoriaDAO($conn);
+        return $dao->list();
     }
     
 }
