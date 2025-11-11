@@ -35,7 +35,18 @@ final class ContactoDAO extends DAO implements InterfaceDAO
 
     public function list(): array
     {
-        return array();
+        $sql = "SELECT nombre, apellido FROM `contacto` WHERE contacto.usuario_id  = ". $_SESSION["id"];
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function filter(): array
+    {
+        $sql = "";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 }
