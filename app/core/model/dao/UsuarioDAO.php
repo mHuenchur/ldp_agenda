@@ -62,8 +62,10 @@ final class UsuarioDAO extends DAO implements InterfaceDAO
     }
 
     public function updatePassword($id, $clave){
+
+        $nuevaClave = password_hash($clave, PASSWORD_DEFAULT);
         
-        $sql = "UPDATE usuario SET clave = '{$clave}' WHERE usuario.id = '{$id}'";
+        $sql = "UPDATE usuario SET clave = '{$nuevaClave}' WHERE usuario.id = '{$id}'";
 
         $stmt = $this->conn->prepare($sql);
 
