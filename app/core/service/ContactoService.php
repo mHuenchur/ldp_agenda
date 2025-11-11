@@ -33,7 +33,16 @@ final class ContactoService extends Service implements InterfaceService{
     }
 
     public function list(): array{
-        return [];
+        $conn = Connection::get();
+        $dao = new ContactoDAO($conn);
+        return $dao->list();
+    }
+
+    public function filter(array $object): array{
+        //
+        $conn = Connection::get();
+        $dao = new ContactoDAO($conn);
+        return $dao->filter();
     }
     
 }
