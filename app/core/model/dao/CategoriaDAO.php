@@ -40,7 +40,10 @@ final class CategoriaDAO extends DAO implements InterfaceDAO
 
     public function list(): array
     {
-        return array();
+        $sql = "SELECT * FROM `categoria` WHERE categoria.usuario_id  = ". $_SESSION["id"];
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 }
