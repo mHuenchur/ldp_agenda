@@ -17,6 +17,10 @@ let contactoController = {
             {etiqueta: "trabajo", numero: "666777"}
         ]
     },
+    dataFiltros: {
+        categoria: "",
+        tipo: ""
+    },
     saveContacto: () => {
         //VALIDAR CAMPOS
         //ENVIAR AL SERVICE
@@ -28,5 +32,8 @@ let contactoController = {
                     console.log("NO SE PUDO GUARDAR");
                 }
             })
+    },
+    filtrarLista: () => {
+        contactoService.filtrarLista(contactoController.dataFiltros);
     }
 }
