@@ -39,12 +39,15 @@ final class AutenticacionController extends Controller{
         $service = new UsuarioService();
         $valores = $request->getData();
         $valores["perfilID"] = "3";
-        $service->save($valores);
+
+        $_SESSION["id"] = $service->save($valores);
+
         $_SESSION["token"] = APP_TOKEN;
         $_SESSION["usuario"] = $valores["nombreUsuario"];
         $_SESSION["perfil"] = "usuario";
+
         $response->setController($_SESSION["perfil"]);
-        $response->setMessage("El usuario se registró correctamente");
+        $response->setMessage("El usuario se registro correctamente");
         $response->send();
     }
 
@@ -91,8 +94,9 @@ final class AutenticacionController extends Controller{
         $dato = $request->getData();
         //si lo es modificamos la clave y consumimos el token
         //sino, mensaje de error
+        
         if ($service->validityCheck($dato["valor"])) {
-            //encuentro usuraio por token
+            //encuentro usuario por token
             $id = $service->findUser($dato["valor"]);
             //creo una instancia service usuario
             $user = new UsuarioService();
