@@ -6,7 +6,7 @@ use app\core\model\base\InterfaceDTO;
 
 interface InterfaceDAO {
 
-    public function save(InterfaceDTO $object):void;
+    public function save(InterfaceDTO $object);
 
     public function load($id): InterfaceDTO;
 
