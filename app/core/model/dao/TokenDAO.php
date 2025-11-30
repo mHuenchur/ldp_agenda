@@ -15,14 +15,12 @@ final class TokenDAO extends DAO
 
     public function create($id, $email, $token)
     {
-        //INSERT INTO `token_reset`(`usuario_id`, `proposito`, `token_hash`, `fecha_expiracion`, `utilizado`) 
-        //VALUES ('10','password_reset','abc123',UTC_TIMESTAMP() + INTERVAL 30 MINUTE, false)
-
+        $this->usedToken($id);
         //generar la consulta y guardar en BD
         $clave = hash('sha256', $token);
 
         $sql = "INSERT INTO {$this->table} (`usuario_id`, `proposito`, `token_hash`, `fecha_expiracion`, `utilizado`) 
-                VALUES ('{$id}','password_reset','{$clave}', UTC_TIMESTAMP() + INTERVAL 30 MINUTE, false)";
+                VALUES ('{$id}','password_reset','{$clave}', DATE_ADD(UTC_TIMESTAMP(), INTERVAL 30 MINUTE), false)";
 
         $stmt = $this->conn->prepare($sql);
 
@@ -36,22 +34,22 @@ final class TokenDAO extends DAO
         $sql = "SELECT EXISTS (
         SELECT 1 
         FROM token_reset 
-        WHERE token_reset.token_hash = UNHEX(:hash_hex) 
+        WHERE token_reset.token_hash = :hash_hex
         AND token_reset.fecha_expiracion > UTC_TIMESTAMP() 
         AND token_reset.utilizado = 0)";
 
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([':hash_hex' => $clave]);
+        $stmt->execute(['hash_hex' => $clave]);
 
-        return $stmt->fetchColumn();
+        return (bool)$stmt->fetchColumn();
     }
 
     public function findUser($token)
     {
         $clave = hash('sha256', $token);
-        $sql = "SELECT token_reset.usuario_id FROM `token_reset` WHERE token_reset.token_hash = UNHEX('{$clave}')";
+        $sql = "SELECT token_reset.usuario_id FROM `token_reset` WHERE token_reset.token_hash = :hash_hex";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
+        $stmt->execute(['hash_hex' => $clave]);
         
         return $stmt->fetchColumn();
     }
