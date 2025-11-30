@@ -4,6 +4,8 @@ namespace app\core\controller;
 
 use app\core\controller\base\InterfaceController;
 use app\core\controller\base\Controller;
+use app\core\service\ContactoService;
+use app\core\service\RecordatorioService;
 use app\core\service\UsuarioService;
 use app\libs\authentication\Authentication;
 use app\libs\response\Response;
@@ -14,13 +16,19 @@ final class UsuarioController extends Controller implements InterfaceController{
     public function __construct()
     {
         parent::__construct([
-            
+            "public/app/js/usuario/usuarioController.js",
+            "public/app/js/usuario/usuarioService.js",
         ]);
     }
     // BUSCA EL INICIO DE LA VISTA CORRESPONDIENTE
     public function index(Request $request, Response $response): void{
-        //$service = new UsuarioService();
-        //$listado = $service->list();
+        $serviceContacto = new ContactoService();
+        $cumpleañosHoy = $serviceContacto->cumpleaños();
+
+        $cumpleañosSiguientes =  $serviceContacto->cumpleañosProximos();
+
+        $serviceRecordatorio = new RecordatorioService();
+        $listadoRecordatorios = $serviceRecordatorio->list();
         
         $this->view = "usuario/index.php";
         require_once APP_TEMPLATE . "template.php";
@@ -41,9 +49,20 @@ final class UsuarioController extends Controller implements InterfaceController{
     public function edit(Request $request, Response $response): void{
 
     }
-    // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
+    // ACTUALIZA UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function update(Request $request, Response $response): void{
-
+        $service = new UsuarioService();
+        $valores = $request->getData();
+        $service->update($valores);
+        $response->setMessage("se actualizo el usuario");
+        $response->send();
+    }
+    public function updateClave(Request $request, Response $response){
+        $service = new UsuarioService();
+        $valores = $request->getData();
+        $service->updateClave($valores);
+        $response->setMessage("se actualizo el usuario");
+        $response->send();
     }
     //GESTIONA LA ELIMINACION DE UNA ENTIDAD DEL SISTEMA
     public function delete(Request $request, Response $response): void{
@@ -59,6 +78,8 @@ final class UsuarioController extends Controller implements InterfaceController{
     }
 
     public function perfil(): void{
+        $service = new UsuarioService();
+        $usuario = $service->load($_SESSION["id"])->toArray();
         $this->view = "usuario/perfil.php";
         require_once APP_TEMPLATE . "template.php";
     }
