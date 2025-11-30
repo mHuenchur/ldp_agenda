@@ -35,7 +35,10 @@ final class TipoDAO extends DAO implements InterfaceDAO
 
     public function list(): array
     {
-        return array();
+        $sql = "SELECT * FROM `tipo`";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 }
