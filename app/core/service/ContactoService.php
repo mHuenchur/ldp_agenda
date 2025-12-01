@@ -27,7 +27,9 @@ final class ContactoService extends Service implements InterfaceService{
     }
 
     public function update(array $object): void{
-
+        $conn = Connection::get();
+        $dao = new ContactoDAO($conn);
+        $dao->update(new ContactoDTO($object));
     }
 
     public function delete($id): void{
