@@ -37,7 +37,12 @@ final class TelefonoDAO extends DAO implements InterfaceDAO
 
     public function delete($id): void
     {
-        
+        $sql = "DELETE FROM {$this->table} WHERE contacto_id = :cid";
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->execute([
+            "cid" => $id,
+        ]);
     }
 
     public function list(): array
