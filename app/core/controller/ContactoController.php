@@ -70,7 +70,6 @@ final class ContactoController extends Controller implements InterfaceController
         $serviceCategoria = new CategoriaService();
         $serviceTelefono = new TelefonoService();
 
-
         $contacto = $service->load($request->getId())->toArray();
 
         $listadoTelefonos = $serviceTelefono->listByContacto($contacto["id"]);
@@ -85,7 +84,22 @@ final class ContactoController extends Controller implements InterfaceController
     }
     // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function update(Request $request, Response $response): void{
+        $serviceTelefono = new TelefonoService();
+        $serviceContacto = new ContactoService();
 
+        $valores = $request->getData();
+        $serviceTelefono->delete($valores["id"]);
+
+        $serviceContacto->update($valores);
+        $response->setMessage("El contacto se actualizo correctamente");
+
+        $serviceTelefono = new TelefonoService();
+        $telefonos = $valores["telefonos"];
+        foreach ($telefonos as $telefono) {
+            $telefono["contacto_id"] = $valores["id"];
+            $serviceTelefono->save($telefono);
+        }
+        $response->send();
     }
     //GESTIONA LA ELIMINACION DE UNA ENTIDAD DEL SISTEMA
     public function delete(Request $request, Response $response): void{
@@ -130,7 +144,7 @@ final class ContactoController extends Controller implements InterfaceController
             $count = 1;
             foreach ($listadoContactos as $contacto) {
                 if ($contacto["razon_social"] == "") {
-                    $valorTipo = $contacto["apellido"].$contacto["nombre"];
+                    $valorTipo = $contacto["apellido"]. " " .$contacto["nombre"];
                     $valorFecha = date('d/m/Y', strtotime($contacto["fecha_nacimiento"]));
                 } else {
                     $valorTipo = $contacto["razon_social"];
