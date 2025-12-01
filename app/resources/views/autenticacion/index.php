@@ -45,7 +45,7 @@
                     <input type="text" class="form-control" id="datoEmail">
                 </div>
                 <div class="mb-3">
-                    <label for="datoUsuario" class="form-label">Nombre de suario</label>
+                    <label for="datoUsuario" class="form-label">Nombre de usuario</label>
                     <input type="text" class="form-control" id="datoUsuario">
                 </div>
                 <div class="mb-3">
