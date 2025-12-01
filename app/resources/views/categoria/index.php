@@ -7,31 +7,42 @@
         <h5 class="mb-0">Operaciones</h5>
         <div class="d-flex gap-2">
           <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#categoriaModal">Nueva categoria</button>
-          <button class="btn btn-outline-secondary btn-sm">Exportar</button>
+          <a id="" class="btn btn-outline-secondary btn-sm" href="categoria/pdf" target="_blank" rel="noopener">Exportar PDF</a>
         </div>
       </div>
     </section>
 
-    <!-- Contenedor 2: Listado -->
-    <section class="card shadow-sm">
-      <div class="card-header">Listado de elementos</div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <span>Elemento 1</span>
-          <button class="btn btn-sm btn-outline-secondary">Ver</button>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <span>Elemento 2</span>
-          <button class="btn btn-sm btn-outline-secondary">Ver</button>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <span>Elemento 3</span>
-          <button class="btn btn-sm btn-outline-secondary">Ver</button>
-        </li>
-      </ul>
-    </section>
+    <!-- Listado -->
+    <table id="TableCategoria" class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Opciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        if (!empty($listadoCategorias)) {
+          $html = "";
+          $count = 1;
+          foreach ($listadoCategorias as $categoria) {
+            $row = '<tr>';
+            $row .= '<th scope="row">'. $count .'</th>';
+            $row .= '<td>'. $categoria["nombre"] .'</td>';
+            $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="">Ver detalles</a><a id="" class="btn btn-danger mx-1" href="">Eliminar</a>' .'</td>';
+            $row .= '</tr>';
+            $html .= $row;
+            $count++;
+          }
+          echo $html;
+        }
+        ?>
+      </tbody>
+    </table>
   </div>
 </div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="categoriaModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
