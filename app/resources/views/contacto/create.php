@@ -104,6 +104,6 @@
   </div>
 
   <div class="d-flex justify-content-end mt-3">
-    <button onclick=contactoController.saveContacto() class="btn btn-primary">Guardar</button>
+    <button type="button" onclick=contactoController.saveContacto() class="btn btn-primary">Guardar</button>
   </div>
 </form>
