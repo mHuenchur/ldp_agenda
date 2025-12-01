@@ -43,6 +43,13 @@ final class ContactoDAO extends DAO implements InterfaceDAO
     public function update(InterfaceDTO $object): void
     {
         
+        $sql = "UPDATE `contacto` 
+        SET `nombre`=:nombre,`apellido`=:apellido,`razon_social`=:razon_social,`direccion`=:direccion,`email`=:email,`sitio_web`=:sitio_web
+        ,`fecha_nacimiento`=:fecha_nacimiento,`observaciones`=:observaciones,`tipo_id`=:tipo_id,`categoria_id`=:categoria_id WHERE contacto.id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $data = $object->toArray();
+
+        $stmt->execute($data);
     }
 
     public function delete($id): void
