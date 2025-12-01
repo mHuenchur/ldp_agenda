@@ -6,7 +6,7 @@ use app\core\model\base\InterfaceDTO;
 
 final class UsuarioDTO  implements InterfaceDTO
 {
-    private $id, $nombre, $apellido, $nombreUsuario, $clave, $correo, $perfilId;
+    private $id, $nombre, $apellido, $nombreUsuario, $clave, $correo, $perfilId, $tiempoNotificacion;
 
 
     public function __construct($data = [])
@@ -18,6 +18,7 @@ final class UsuarioDTO  implements InterfaceDTO
         $this->setClave($data["clave"] ?? "");
         $this->setCorreo($data["correo"] ?? "");
         $this->setPerfilId($data["perfilID"] ?? "3");
+        $this->setTiempoNotificacion($data["tiempo"] ?? "30");
     }
 
     public function getId(): int{
@@ -40,6 +41,9 @@ final class UsuarioDTO  implements InterfaceDTO
     }
     public function getPerfilId(): int{
         return $this->perfilId;
+    }
+    public function getTiempoNotificacion(): int{
+        return $this->tiempoNotificacion;
     }
 
 
@@ -86,6 +90,12 @@ final class UsuarioDTO  implements InterfaceDTO
         ? $perfilId 
         : "0";
     }
+    public function setTiempoNotificacion($tiempo): void{
+        $this->tiempoNotificacion =
+        (is_numeric($tiempo) && $tiempo > "0") 
+        ? $tiempo 
+        : "30";
+    }
 
     // ** METODOS **
     public function toArray(): array{
@@ -93,10 +103,11 @@ final class UsuarioDTO  implements InterfaceDTO
             "id" => $this->getId(),
             "nombre" => $this->getNombre(),
             "apellido" => $this->getApellido(),
-            "nombreUsuario" => $this->getNombreUsuario(),
-            "correo" => $this->getCorreo(),
+            "nombre_usuario" => $this->getNombreUsuario(),
+            "email" => $this->getCorreo(),
             "clave" => $this->getClave(),
-            "perfilID" => $this->getPerfilId(),
+            "tiempo_notificacion" => $this->getTiempoNotificacion(),
+            "perfil_id" => $this->getPerfilId(),
         ];
     }
 }
