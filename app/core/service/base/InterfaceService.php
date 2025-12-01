@@ -5,7 +5,7 @@ namespace app\core\service\base;
 use app\core\model\base\InterfaceDTO;
 
 interface InterfaceService{
-    public function save(array $object): void;
+    public function save(array $object);
 
     public function load($id): InterfaceDTO;
 
