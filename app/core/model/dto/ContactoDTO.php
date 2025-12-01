@@ -12,7 +12,18 @@ final class ContactoDTO  implements InterfaceDTO
 
 public function __construct($data = [])
 {
-
+    $this->setId($data["id"] ?? "0");
+    $this->setNombre($data["nombre"] ?? "");
+    $this->setApellido($data["apellido"] ?? "");
+    $this->setRazonSocial($data["razon_social"] ?? "");
+    $this->setFechaNacimiento($data["fecha_nacimiento"] ?? "");
+    $this->setDireccion($data["direccion"] ?? "");
+    $this->setEmail($data["email"] ?? "");
+    $this->setSitioWeb($data["sitio_web"] ?? "");
+    $this->setObservaciones($data["observaciones"] ?? "");
+    $this->setIdCategoria($data["categoria_id"] ?? "");
+    $this->setIdTipo($data["tipo_id"] ?? "");
+    $this->setIdUsuario($data["usuario_id"] ?? "");
 }
 
 public function getId(): int{
@@ -42,13 +53,13 @@ public function getFechaNacimiento(): string{
 public function getObservaciones(): string{
     return $this->observaciones;
 }
-public function getIdTipo(): int{
+public function getIdTipo(): string{
     return $this->id_tipo;
 }
-public function getIdCategoria(): int{
+public function getIdCategoria(): string{
     return $this->id_categoria;
 }
-public function getIdUsuario(): int{
+public function getIdUsuario(): string{
     return $this->id_usuario;
 }
 
@@ -96,27 +107,37 @@ public function setSitioWeb($sitioWeb): void{
     ? $sitioWeb
     : "";
 }
-public function setFechaNacimiento(): void{
-    
+public function setFechaNacimiento($fechaNacimiento): void{
+    $this->fecha_nacimiento = $fechaNacimiento;
 }
-public function setObservaciones(): void{
-    
+public function setObservaciones($observaciones): void{
+    $this->observaciones = $observaciones;
 }
-public function setIdTipo(): void{
-    
+public function setIdTipo($tipo): void{
+    $this->id_tipo = $tipo;
 }
-public function setIdCategoria(): void{
-    
+public function setIdCategoria($categoria): void{
+    $this->id_categoria = $categoria;
 }
-public function setIdUsuario(): void{
-    
+public function setIdUsuario($usuario): void{
+    $this->id_usuario = $usuario;
 }
 
 
 // ** METODOS **
 public function toArray(): array{
     return [
-
+        "id" => $this->getId(),
+        "nombre" => $this->getNombre(),
+        "apellido" => $this->getApellido(),
+        "razon_social" => $this->getRazonSocial(),
+        "fecha_nacimiento" => $this->getFechaNacimiento(),
+        "direccion" => $this->getDireccion(),
+        "email" => $this->getEmail(),
+        "sitio_web" => $this->getSitioWeb(),
+        "observaciones" => $this->getObservaciones(),
+        "tipo_id" => $this->getIdTipo(),
+        "categoria_id" => $this->getIdCategoria()
     ];
 }
 }
