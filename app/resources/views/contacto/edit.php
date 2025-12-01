@@ -35,7 +35,16 @@
     </div>
     <div class="col-md-4">
       <label for="fecha_nacimiento" class="form-label">Fecha de nacimiento</label>
-      <input id="fecha_nacimiento" name="fecha_nacimiento" type="date" value="<?php echo $contacto["fecha_nacimiento"] ?>" class="form-control">
+      <?php
+      
+       ?>
+      <input id="fecha_nacimiento" name="fecha_nacimiento" type="date" value="<?php
+      $fecha = "";
+      if ($contacto["tipo_id"] == "1") {
+        $fecha = $contacto["fecha_nacimiento"];
+      }
+      echo $fecha;
+      ?>" class="form-control">
     </div>
   </div>
 
@@ -49,6 +58,7 @@
 
   <!-- Comunes -->
   <div class="row g-3 mt-0">
+    <input type="hidden" name="key" id="key" value="<?php echo $contacto["id"] ?>">
     <div class="col-md-8">
       <label for="direccion" class="form-label">Dirección</label>
       <input id="direccion" name="direccion" type="text" value="<?php echo $contacto["direccion"] ?>" class="form-control" maxlength="120">
@@ -132,6 +142,6 @@
   </div>
 
   <div class="d-flex justify-content-end mt-3">
-    <button onclick=contactoController.saveContacto() class="btn btn-primary">Guardar</button>
+    <button type="button" onclick=contactoController.updateContacto() class="btn btn-primary">Guardar</button>
   </div>
 </form>
