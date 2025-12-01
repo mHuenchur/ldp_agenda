@@ -6,7 +6,8 @@ let autenticacionController = {
         nombreUsuario: "",
         correo: "",
         clave: "",
-        valor: ""
+        valor: "",
+        tiempo: ""
     },
     saveUsuario: () => {
         let form = document.forms["formularioAltaUsuario"];
