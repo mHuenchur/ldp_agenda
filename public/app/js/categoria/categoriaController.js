@@ -2,7 +2,7 @@ let categoriaController = {
     dataCategoria: {
         id: "",
         nombre: "",
-        user: ""
+        usuario_id: ""
     },
     saveCategoria: () => {
         if(categoriaController.checkInputs()){
@@ -10,12 +10,29 @@ let categoriaController = {
             categoriaService.saveCategoria(categoriaController.dataCategoria)
             .then(response => {
                 if(response.error === ""){
-                    console.log("YES");
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
                 }else{
                     console.log("NO");
                 }
             })
         }
+    },
+    updateCategoria: () => {
+        categoriaController.dataCategoria.id = document.getElementById("categoriaId").value;
+        categoriaController.dataCategoria.nombre = document.getElementById("nombre").value;
+        categoriaService.updateCategoria(categoriaController.dataCategoria)
+        .then(response => {
+            if(response.error === ""){
+                console.log(response.mensaje);
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+            }else{
+                console.log("NO");
+            }
+        })
     },
     checkInputs: () => {
         let inputNombre = document.getElementById("inputNombreCategoria");
@@ -32,6 +49,10 @@ let categoriaController = {
 
 let btnNew = document.getElementById("btnNuevaCategoria");
 
-btnNew.onclick = () => {
-    categoriaController.saveCategoria();
+if (!(btnNew === null)) {
+    btnNew.onclick = () => {
+        categoriaController.saveCategoria();
+    }
 }
+
+
