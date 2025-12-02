@@ -5,6 +5,7 @@ namespace app\core\model\dao;
 use app\core\model\base\DAO;
 use app\core\model\base\InterfaceDAO;
 use app\core\model\base\InterfaceDTO;
+use app\core\model\dto\CategoriaDTO;
 
 final class CategoriaDAO extends DAO implements InterfaceDAO
 {
@@ -25,12 +26,24 @@ final class CategoriaDAO extends DAO implements InterfaceDAO
 
     public function load($id): InterfaceDTO
     {
-        return  new InterfaceDTO();
+        $sql = "SELECT `id`, `nombre` FROM {$this->table} WHERE categoria.id =:cid AND usuario_id = :uid";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "cid" => $id,
+            "uid" => $_SESSION["id"],
+        ]);
+        return  new CategoriaDTO($stmt->fetch(\PDO::FETCH_ASSOC));
     }
 
     public function update(InterfaceDTO $object): void
     {
-        
+        $data = $object->toArray();
+        $sql = "UPDATE `categoria` SET `nombre`=:nombre WHERE categoria.id = :cid";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "cid" => $data["id"],
+            "nombre" => $data["nombre"],
+        ]);
     }
 
     public function delete($id): void
