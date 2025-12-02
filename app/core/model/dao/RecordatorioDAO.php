@@ -5,6 +5,7 @@ namespace app\core\model\dao;
 use app\core\model\base\DAO;
 use app\core\model\base\InterfaceDAO;
 use app\core\model\base\InterfaceDTO;
+use app\core\model\dto\RecordatorioDTO;
 
 final class RecordatorioDAO extends DAO implements InterfaceDAO
 {
@@ -28,12 +29,26 @@ final class RecordatorioDAO extends DAO implements InterfaceDAO
 
     public function load($id): InterfaceDTO
     {
-        return  new InterfaceDTO();
+        $sql = "SELECT `id`, `nombre`, `fecha_hora`, `lugar`, `usuario_id` FROM `recordatorio` WHERE id = :rid";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "rid" => $id,
+        ]);
+        return  new RecordatorioDTO($stmt->fetch(\PDO::FETCH_ASSOC));
     }
 
     public function update(InterfaceDTO $object): void
     {
-        
+        $sql = 'UPDATE `recordatorio` SET `nombre`=:nombre,`fecha_hora`=:fecha_hora,`lugar`=:lugar WHERE recordatorio.id = :id AND recordatorio.usuario_id = :uid';
+        $stmt = $this->conn->prepare($sql);
+        $data = $object->toArray();
+        $stmt->execute([
+            "uid" => $_SESSION["id"],
+            "id" => $data["id"],
+            "nombre" => $data["nombre"],
+            "fecha_hora" => $data["fecha_hora"],
+            "lugar" => $data["lugar"],
+        ]);
     }
 
     public function delete($id): void
@@ -43,7 +58,6 @@ final class RecordatorioDAO extends DAO implements InterfaceDAO
 
     public function list(): array
     {
-        //$sql = "SELECT id, nombre, fecha_hora, lugar, usuario_id FROM {$this->table} WHERE usuario_id  = ". $_SESSION["id"];
         $sql = "SELECT r.*
                 FROM recordatorio r
                 JOIN usuario u ON u.id = r.usuario_id
@@ -90,6 +104,25 @@ final class RecordatorioDAO extends DAO implements InterfaceDAO
         $stmt->execute([
             'recordatorio_id' => $object["recordatorio_id"],
             'contacto_id' => $object["contacto"]
+        ]);
+    }
+
+    public function listarRelacion($id)
+    {
+        $sql = "SELECT `contacto_id` FROM `recordatorio_contacto` WHERE recordatorio_id = :rid";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "rid" => $id,
+        ]);
+        return $stmt->fetchAll(\PDO::FETCH_COLUMN);
+    }
+
+    public function eliminarRelacion($id)
+    {
+        $sql = "DELETE FROM `recordatorio_contacto` WHERE recordatorio_id = :rid";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "rid" => $id,
         ]);
     }
 
