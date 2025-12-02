@@ -142,6 +142,9 @@
   </div>
 
   <div class="d-flex justify-content-end mt-3">
+    <a id="btnPdf" class="btn btn-outline-secondary mx-3" href="contacto/contactoPDF/<?php echo $contacto["id"] ?>" target="_blank" rel="noopener">
+      Exportar a PDF
+    </a>
     <button type="button" onclick=contactoController.updateContacto() class="btn btn-primary">Guardar</button>
   </div>
 </form>
