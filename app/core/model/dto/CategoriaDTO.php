@@ -13,7 +13,7 @@ public function __construct($data = [])
 {
     $this->setId($data["id"] ?? "0");
     $this->setNombre($data["nombre"] ?? "");
-    $this->setUsuarioId($data["user"] ?? "");
+    $this->setUsuarioId($data["usuario_id"] ?? "");
 }
 
 public function getId(): int{
