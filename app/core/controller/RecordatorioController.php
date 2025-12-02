@@ -59,12 +59,33 @@ final class RecordatorioController extends Controller implements InterfaceContro
     }
     // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function edit(Request $request, Response $response): void{
+        $serviceContactos = new ContactoService();
+        $listadoContactos = $serviceContactos->list();
+
+
+        $serviceRecordatorio = new RecordatorioService();
+        $recordatorio = $serviceRecordatorio->load($request->getId())->toArray();
+
+        $listadoRelacion = $serviceRecordatorio->listarRelacion($request->getId());
         $this->view = "recordatorio/edit.php";
         require_once APP_TEMPLATE . "template.php";
     }
     // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function update(Request $request, Response $response): void{
-
+        $service = new RecordatorioService();
+        $valores = $request->getData();
+        //guardar recordatorio
+        $service->update($valores);
+        $response->setMessage("El recordatorio se actualizo correctamente");
+        //elimino relaciones anteriores
+        $service->eliminarRelacion($valores["id"]);
+        //guardo nuevas relaciones
+        $contactos = $valores["contactos"];
+        foreach ($contactos as $contacto) {
+            $contacto["recordatorio_id"] = $valores["id"];
+            $service->guardarRelacion($contacto);
+        }
+        $response->send();
     }
     //GESTIONA LA ELIMINACION DE UNA ENTIDAD DEL SISTEMA
     public function delete(Request $request, Response $response): void{
