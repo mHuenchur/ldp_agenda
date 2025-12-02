@@ -292,4 +292,201 @@ final class ContactoController extends Controller implements InterfaceController
         ]);
     }
 
+    public function contactoPDF(Request $request, Response $response){
+        $service = new ContactoService();
+        $serviceTipo = new TipoService();
+        $serviceCategoria = new CategoriaService();
+        $serviceTelefono = new TelefonoService();
+
+        $contacto = $service->load($request->getId())->toArray();
+
+        $listadoTelefonos = $serviceTelefono->listByContacto($contacto["id"]);
+        $listadoTipos = $serviceTipo->list();
+        $listadoCategorias = $serviceCategoria->list();
+
+        if ($listadoTipos[0]["id"] == $contacto["tipo_id"]) {
+            $dataTipo = $listadoTipos[0]["nombre"];
+        } else {
+            $dataTipo = $listadoTipos[1]["nombre"];
+        }
+        foreach ($listadoCategorias as $categoria) {
+            if ($categoria["id"] == $contacto["categoria_id"]) {
+                $dataCategoria = $categoria["nombre"];
+            }
+        }
+        $telefonos = '';
+        if (!empty($listadoTelefonos)) {
+            foreach ($listadoTelefonos as $telefono) {
+                $telefonos .= '<tr>
+                                    <td>'.$telefono["etiqueta"].'</td>
+                                    <td>'.$telefono["numero"].'</td>
+                                </tr>';
+            }
+        }
+
+        $tr = '';
+        if ($contacto["razon_social"] == "") {
+            $tr .= '<tr>
+                        <th>Nombre</th>
+                        <td>'. $contacto["nombre"] .'</td>
+                    </tr>
+                    <tr>
+                        <th>Apellido</th>
+                        <td>'. $contacto["apellido"] .'</td>
+                    </tr>
+                    <tr>
+                        <th>Fecha de nacimiento</th>
+                        <td>
+                            '. date('d/m/Y', strtotime($contacto["fecha_nacimiento"])) .'
+                        </td>
+                    </tr>';
+        } else {
+            $tr = '<tr>
+                        <th>Razón social</th>
+                        <td>'. $contacto["razon_social"] .'</td>
+                    </tr>';
+        }
+        
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml('<!DOCTYPE html>
+                            <html lang="es">
+                            <head>
+                                <meta charset="UTF-8">
+                                <title>Detalle de contacto</title>
+                                <style>
+                                    body {
+                                        font-family: DejaVu Sans, sans-serif;
+                                        font-size: 11pt;
+                                        margin: 20px;
+                                    }
+
+                                    h1 {
+                                        font-size: 18pt;
+                                        margin: 0 0 8px 0;
+                                    }
+
+                                    .subtitulo {
+                                        font-size: 10pt;
+                                        color: #555;
+                                        margin-bottom: 12px;
+                                    }
+
+                                    .meta {
+                                        font-size: 9pt;
+                                        color: #777;
+                                        margin-bottom: 15px;
+                                    }
+
+                                    table {
+                                        width: 100%;
+                                        border-collapse: collapse;
+                                        margin-top: 6px;
+                                    }
+
+                                    th, td {
+                                        border: 1px solid #444;
+                                        padding: 4px 6px;
+                                        vertical-align: top;
+                                    }
+
+                                    th {
+                                        background-color: #eee;
+                                        font-weight: bold;
+                                        text-align: left;
+                                    }
+
+                                    .tabla-detalle th {
+                                        width: 25%;
+                                    }
+
+                                    .seccion {
+                                        margin-top: 18px;
+                                        font-weight: bold;
+                                        font-size: 12pt;
+                                    }
+
+                                    .footer {
+                                        margin-top: 20px;
+                                        font-size: 8pt;
+                                        color: #777;
+                                        text-align: right;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+
+                                <h1>Detalle de contacto</h1>
+                                <div class="subtitulo">
+                                    Usuario: '. $_SESSION["usuario"] .'
+                                </div>
+
+                                <div class="meta">
+                                    Generado el: '. date("d/m/Y") .'
+                                </div>
+
+                                <div class="seccion">Datos generales</div>
+                                <table class="tabla-detalle">
+                                    <tbody>
+                                        '.$tr.'
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <td>'.$dataTipo.'</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Categoría</th>
+                                            <td>'.$dataCategoria.'</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Dirección</th>
+                                            <td>'.$contacto["direccion"].'</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Email</th>
+                                            <td>'.$contacto["email"].'</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Sitio web</th>
+                                            <td>'.$contacto["sitio_web"].'</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Observaciones</th>
+                                            <td>'.$contacto["observaciones"].'</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="seccion">Teléfonos</div>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 30%;">Etiqueta</th>
+                                            <th style="width: 70%;">Número</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    '.$telefonos.'
+                                    </tbody>
+                                </table>
+
+                                <div class="footer">
+                                    Sistema de Agenda Web
+                                </div>
+
+                            </body>
+                            </html>
+                            ');
+
+        // (Optional) Setup the paper size and orientation
+        $dompdf->setPaper('A4', 'landscape');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser
+        $dompdf->stream('Categoria.pdf', [
+            'Attachment' => 0, // 0 = mostrar en el navegador, 1 = descargar
+        ]);
+    }
+
 }
