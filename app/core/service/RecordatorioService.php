@@ -19,11 +19,15 @@ final class RecordatorioService extends Service implements InterfaceService{
     }
 
     public function load($id): InterfaceDTO{
-        return new InterfaceDTO();
+        $conn = Connection::get();
+        $dao = new RecordatorioDAO($conn);
+        return $dao->load($id);
     }
 
     public function update(array $object): void{
-
+        $conn = Connection::get();
+        $dao = new RecordatorioDAO($conn);
+        $dao->update(new RecordatorioDTO($object));
     }
 
     public function delete($id): void{
@@ -40,6 +44,18 @@ final class RecordatorioService extends Service implements InterfaceService{
         $conn = Connection::get();
         $dao = new RecordatorioDAO($conn);
         return $dao->guardarRelacion($object);
+    }
+
+    public function eliminarRelacion($id){
+        $conn = Connection::get();
+        $dao = new RecordatorioDAO($conn);
+        $dao->eliminarRelacion($id);
+    }
+
+    public function listarRelacion($id){
+        $conn = Connection::get();
+        $dao = new RecordatorioDAO($conn);
+        return $dao->listarRelacion($id);
     }
 
     public function listarVigentes(){
