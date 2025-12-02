@@ -27,7 +27,7 @@ final class CategoriaController extends Controller implements InterfaceControlle
     }
     // BUSCA UN ELEMENTO EN PARTICULAR
     public function load(Request $request, Response $response): void{
-
+        
     }
     // BUSCA LA VISTA DE CREAR UNA NUEVA ENTIDAD
     public function create(Request $request, Response $response): void{
@@ -37,18 +37,24 @@ final class CategoriaController extends Controller implements InterfaceControlle
     public function save(Request $request, Response $response): void{
         $service = new CategoriaService();
         $valores = $request->getData();
-        $valores["user"] = $_SESSION["id"];
+        $valores["usuario_id"] = $_SESSION["id"];
         $service->save($valores);
-        $response->setMessage("La sala se registró correctamente");
+        $response->setMessage("La categoria se registró correctamente");
         $response->send();
     }
     // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function edit(Request $request, Response $response): void{
-
+        $service = new CategoriaService();
+        $categoria = $service->load($request->getId())->toArray();
+        $this->view = "categoria/edit.php";
+        require_once APP_TEMPLATE . "template.php";
     }
     // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function update(Request $request, Response $response): void{
-
+        $service = new CategoriaService();
+        $service->update($request->getData());
+        $response->setMessage("La categoria se actualizo correctamente");
+        $response->send();
     }
     //GESTIONA LA ELIMINACION DE UNA ENTIDAD DEL SISTEMA
     public function delete(Request $request, Response $response): void{
