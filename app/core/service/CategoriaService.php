@@ -20,11 +20,15 @@ final class CategoriaService extends Service implements InterfaceService{
     }
 
     public function load($id): InterfaceDTO{
-        return new InterfaceDTO;
+        $conn = Connection::get();
+        $dao = new CategoriaDAO($conn);
+        return $dao->load($id);
     }
 
     public function update(array $object): void{
-
+        $conn = Connection::get();
+        $dao = new CategoriaDAO($conn);
+        $dao->update(new CategoriaDTO($object));
     }
 
     public function delete($id): void{
