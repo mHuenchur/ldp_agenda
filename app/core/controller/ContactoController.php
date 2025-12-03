@@ -103,7 +103,19 @@ final class ContactoController extends Controller implements InterfaceController
     }
     //GESTIONA LA ELIMINACION DE UNA ENTIDAD DEL SISTEMA
     public function delete(Request $request, Response $response): void{
-        
+        $service = new ContactoService();
+        try {
+            $service->delete($request->getId());
+            $response->setMessage("El contacto se elimino correctamente");
+            $response->send();
+        } catch (\Exception $e) {
+            if ($e->getMessage() === "ACCION DENEGADA") {
+                $response->setError("No se puede eliminar el contacto porque hay recordatorios que lo utilizan.");
+            } else {
+                $response->setError("No se puede eliminar el contacto.");
+            }
+            $response->send();
+        }
     }
 
     public function filter(Request $request, Response $response): void{
