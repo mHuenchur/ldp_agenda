@@ -30,8 +30,24 @@
             $row = '<tr>';
             $row .= '<th scope="row">'. $count .'</th>';
             $row .= '<td>'. $categoria["nombre"] .'</td>';
-            $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="">Ver detalles</a><a id="" class="btn btn-danger mx-1" href="">Eliminar</a>' .'</td>';
+            $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="categoria/edit/'. $categoria["id"].'">Ver detalles</a><a id="" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#'. $categoria["id"]. '">Eliminar</a>' .'</td>';
             $row .= '</tr>';
+            $row .= '<div class="modal fade" id="'. $categoria["id"] .'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered ">
+                      <div class="modal-content text-danger-emphasis bg-danger-subtle border border-danger-subtle">
+                        <div class="modal-header border-danger-subtle">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar categoria</h1>
+                        </div>
+                        <div class="modal-body border-danger-subtle">
+                          <p>Esta seguro que desea eliminar la categoria '. $categoria["nombre"].'?</p>
+                        </div>
+                        <div class="modal-footer border-danger-subtle">
+                          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="button" class="btn btn-danger" onclick=categoriaController.deleteCategoria('.$categoria["id"].')>Eliminar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>';
             $html .= $row;
             $count++;
           }
