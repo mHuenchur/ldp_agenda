@@ -58,7 +58,19 @@ final class CategoriaController extends Controller implements InterfaceControlle
     }
     //GESTIONA LA ELIMINACION DE UNA ENTIDAD DEL SISTEMA
     public function delete(Request $request, Response $response): void{
-        
+        $service = new CategoriaService();
+        try {
+            $service->delete($request->getId());
+            $response->setMessage("La categoria se elimino correctamente");
+            $response->send();
+        } catch (\Exception $e) {
+            if ($e->getMessage() === "ACCION DENEGADA") {
+                $response->setError("No se puede eliminar la categoría porque hay contactos que la utilizan.");
+            } else {
+                $response->setError("No se puede eliminar la categoría.");
+            }
+            $response->send();
+        }
     }
 
     public function pdf(Request $request, Response $response){
