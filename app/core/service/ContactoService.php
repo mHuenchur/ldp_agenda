@@ -34,6 +34,12 @@ final class ContactoService extends Service implements InterfaceService{
 
     public function delete($id): void{
 
+        $conn = Connection::get();
+        $dao = new ContactoDAO($conn);
+        if ($dao->tieneRecordatorios($id)) {
+            throw new \Exception("ACCION DENEGADA");
+        }
+        $dao->delete($id);
     }
 
     public function list(): array{
