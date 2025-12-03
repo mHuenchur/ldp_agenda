@@ -52,9 +52,30 @@ final class ContactoDAO extends DAO implements InterfaceDAO
         $stmt->execute($data);
     }
 
-    public function delete($id): void
+    public function tieneRecordatorios($contactoId): bool
     {
-        
+        $sql = "SELECT EXISTS (
+                    SELECT 1
+                    FROM recordatorio_contacto rc
+                    JOIN recordatorio r ON r.id = rc.recordatorio_id
+                    WHERE (rc.contacto_id = :cid
+                    AND r.usuario_id = :uid) OR r.usuario_id != :uid 
+                ) AS tiene_recordatorios;";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "cid" => $contactoId,
+            "uid" => $_SESSION["id"],
+        ]);
+        return (bool)$stmt->fetchColumn();
+    }
+
+    public function delete($contactoId): void
+    {
+        $sql = "DELETE FROM `contacto` WHERE id = :cid;";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "cid" => $contactoId,
+        ]);
     }
 
     public function list(): array
