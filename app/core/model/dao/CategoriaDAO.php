@@ -46,9 +46,29 @@ final class CategoriaDAO extends DAO implements InterfaceDAO
         ]);
     }
 
-    public function delete($id): void
+    public function tieneContactos($categoriaId): bool
     {
-        
+        $sql = "SELECT EXISTS (
+                    SELECT 1
+                    FROM contacto
+                    WHERE categoria_id = :cid
+                    OR usuario_id != :uid
+                ) AS tiene_contactos;";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "cid" => $categoriaId,
+            "uid" => $_SESSION["id"],
+        ]);
+        return (bool)$stmt->fetchColumn();
+    }
+
+    public function delete($categoriaId): void
+    {
+        $sql = "DELETE FROM `categoria` WHERE id = :cid;";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "cid" => $categoriaId,
+        ]);
     }
 
     public function list(): array
