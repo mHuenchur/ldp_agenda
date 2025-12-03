@@ -34,6 +34,16 @@ let categoriaController = {
             }
         })
     },
+    deleteCategoria: ($id) => {
+        categoriaService.deleteCategoria($id)
+        .then(response => {
+            if(response.error === ""){
+                console.log(response.mensaje);
+            }else{
+                console.log(response.error);
+            }
+        })
+    },
     checkInputs: () => {
         let inputNombre = document.getElementById("inputNombreCategoria");
         const val = (inputNombre.value || '').trim();
