@@ -68,15 +68,34 @@
       foreach ($listadoContactos as $contacto) {
         $row = '<tr>';
         $row .= '<th scope="row">'. $count .'</th>';
+        $nombre = "";
         if ($contacto["tipo_id"] == 1) {
-          $row .= '<td>'. $contacto["apellido"] . " " . $contacto["nombre"] .'</td>';
+          $nombre = $contacto["apellido"] . " " . $contacto["nombre"];
+          $row .= '<td>'. $nombre .'</td>';
         } else {
-          $row .= '<td>'. $contacto["razon_social"] .'</td>';
+          $nombre = $contacto["razon_social"];
+          $row .= '<td>'. $nombre .'</td>';
         }
         $row .= '<td>'. $contacto["direccion"] .'</td>';
         $row .= '<td>'. $contacto["email"] .'</td>';
-        $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="contacto/edit/'. $contacto["id"]. '">Modificar</a><a id="" class="btn btn-danger mx-1" href="">Eliminar</a>' .'</td>';
+        $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="contacto/edit/'. $contacto["id"]. '">Modificar</a><a id="" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#'. $contacto["id"]. '">Eliminar</a>' .'</td>';
         $row .= '</tr>';
+        $row .= '<div class="modal fade" id="'. $contacto["id"] .'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered ">
+                      <div class="modal-content text-danger-emphasis bg-danger-subtle border border-danger-subtle">
+                        <div class="modal-header border-danger-subtle">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar contacto</h1>
+                        </div>
+                        <div class="modal-body border-danger-subtle">
+                          <p>Esta seguro que desea eliminar el contacto '. $nombre.'?</p>
+                        </div>
+                        <div class="modal-footer border-danger-subtle">
+                          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+                          <button type="button" class="btn btn-danger" onclick=contactoController.deleteContacto('.$contacto["id"].')>Eliminar</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>';
         $html .= $row;
         $count++;
       }
