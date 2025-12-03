@@ -32,7 +32,12 @@ final class CategoriaService extends Service implements InterfaceService{
     }
 
     public function delete($id): void{
-
+        $conn = Connection::get();
+        $dao = new CategoriaDAO($conn);
+        if ($dao->tieneContactos($id)) {
+            throw new \Exception("ACCION DENEGADA");
+        }
+        $dao->delete($id);
     }
 
     public function list(): array{
