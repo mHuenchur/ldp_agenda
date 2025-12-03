@@ -55,5 +55,23 @@ let contactoService = {
         .catch(error => {
             console.error("ERROR EN LA PETICION ", error)
         });
+    },
+    deleteContacto: (data) => {
+        return fetch(`contacto/delete/${data}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error(response.status);
+            }
+            return response.json()
+        })
+        .catch(error => {
+            console.error("ERROR EN LA PETICION ", error)
+        });
     }
 }

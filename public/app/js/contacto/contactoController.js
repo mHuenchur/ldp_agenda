@@ -89,6 +89,16 @@ let contactoController = {
             
         }
     },
+    deleteContacto: ($id) => {
+        contactoService.deleteContacto($id)
+        .then(response => {
+            if(response.error === ""){
+                console.log(response.mensaje);
+            }else{
+                console.log(response.error);
+            }
+        })
+    },
     validacion: () => {
         return true;
     },
