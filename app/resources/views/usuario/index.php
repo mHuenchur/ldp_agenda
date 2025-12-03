@@ -61,7 +61,7 @@
               foreach ($cumpleañosHoy as $cumpleaños) {
                 $div .= '<div class="p-3 border rounded bg-light mb-2">
                           <div class="fw-bold">'. $cumpleaños["nombre"] .' '. $cumpleaños["apellido"] .'</div>
-                          <div class="text-muted">Cumpleaños: '. $cumpleaños["fecha_nacimiento"] .'</div>
+                          <div class="text-muted">Cumpleaños: '. date('d/m/Y ', strtotime($cumpleaños["fecha_nacimiento"])) .'</div>
                         </div>';
               }
               echo $div;
@@ -81,7 +81,7 @@
                 foreach ($cumpleañosSiguientes as $cumpleaños) {
                   $div .= '<div class="p-3 border rounded bg-light mb-2">
                           <div class="fw-bold">'. $cumpleaños["nombre"] .' '. $cumpleaños["apellido"] .'</div>
-                          <div class="text-muted">Cumpleaños: '. $cumpleaños["proximo_cumple"] .'</div>
+                          <div class="text-muted">Cumpleaños: '. date('d/m/Y ', strtotime($cumpleaños["proximo_cumple"])) .'</div>
                         </div>';
                 }
                 echo $div;
