@@ -40,15 +40,21 @@ final class AutenticacionController extends Controller{
         $valores = $request->getData();
         $valores["perfilID"] = "3";
 
-        $_SESSION["id"] = $service->save($valores);
+        try {
+            $_SESSION["id"] = $service->save($valores);
 
-        $_SESSION["token"] = APP_TOKEN;
-        $_SESSION["usuario"] = $valores["nombreUsuario"];
-        $_SESSION["perfil"] = "usuario";
+            $_SESSION["token"] = APP_TOKEN;
+            $_SESSION["usuario"] = $valores["nombreUsuario"];
+            $_SESSION["perfil"] = "usuario";
 
-        $response->setController($_SESSION["perfil"]);
-        $response->setMessage("El usuario se registro correctamente");
-        $response->send();
+            $response->setController($_SESSION["perfil"]);
+            $response->setMessage("El usuario se registro correctamente");
+            $response->send();
+        } catch (\Exception $e) {
+            $response->setError($e->getMessage());
+            $response->send();
+        }
+        
     }
 
     public function passwordLost(Request $request, Response $response): void{
@@ -67,11 +73,8 @@ final class AutenticacionController extends Controller{
             //envia correo
             MailManager::createMail($email["correo"], $token);
             //ENVIAR MENSAJE GENERICO, MODIFICAR DESPUES A UN SOLO MESSAGE!
-            $response->setMessage("Si todo esta bien se envia un correo!");
-            
-        } else {
-            $response->setMessage("Dato incorrecto!");
         }
+        $response->setMessage("Si todo esta bien se envio un correo!");
         $response->send();
     }
 
@@ -93,8 +96,6 @@ final class AutenticacionController extends Controller{
         $service = new PasswordService();
         $dato = $request->getData();
         //si lo es modificamos la clave y consumimos el token
-        //sino, mensaje de error
-        
         if ($service->validityCheck($dato["valor"])) {
             //encuentro usuario por token
             $id = $service->findUser($dato["valor"]);
@@ -104,9 +105,9 @@ final class AutenticacionController extends Controller{
             $user->updatePassword($id, $dato["clave"]);
             //consumo el token
             $service->usedToken($id);
-            $response->setMessage("TODO JOYA");
+            $response->setMessage("EMAIL ACTUALIZADO!");
         } else {
-            $response->setMessage("TODO MAL");
+            $response->setMessage("EMAIL NO SE PUEDE ACTUALIZAR");
         }
         $response->send();
     }
