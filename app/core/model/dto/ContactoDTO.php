@@ -111,7 +111,9 @@ public function setFechaNacimiento($fechaNacimiento): void{
     $this->fecha_nacimiento = $fechaNacimiento;
 }
 public function setObservaciones($observaciones): void{
-    $this->observaciones = $observaciones;
+    $this->observaciones = (is_string($observaciones) && (strlen(trim($observaciones)) <= 255))
+    ? $observaciones
+    : "";
 }
 public function setIdTipo($tipo): void{
     $this->id_tipo = $tipo;
