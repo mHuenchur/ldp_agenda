@@ -22,8 +22,9 @@ final class RecordatorioController extends Controller implements InterfaceContro
     // BUSCA EL INICIO DE LA VISTA CORRESPONDIENTE
     public function index(Request $request, Response $response): void{
         $serviceContactos = new ContactoService();
-        $listadoContactos = $serviceContactos->list();
+        $this->scripts[] = "public/app/js/recordatorio/listado.js";
 
+        $listadoContactos = $serviceContactos->list();
         $serviceRecordatorio = new RecordatorioService();
         $listadoVigentes = $serviceRecordatorio->listarVigentes();
         $listadoVencidos = $serviceRecordatorio->listarVencidos();
@@ -44,18 +45,23 @@ final class RecordatorioController extends Controller implements InterfaceContro
         $valores = $request->getData();
         $valores["usuario_id"] = $_SESSION["id"];
         //guardar recordatorio
-        $valorRecordatorio = $service->save($valores);
-
-        $response->setMessage("El recordatorio se registro correctamente");
-
-        //GUARDAR RELACION RECORDATORIO CONTACTOS
-
-        $contactos = $valores["contactos"];
-        foreach ($contactos as $contacto) {
-            $contacto["recordatorio_id"] = $valorRecordatorio;
-            $service->guardarRelacion($contacto);
+        try {
+            $contactos = $valores["contactos"];
+            if (empty($contactos)) {
+                throw new \Exception("SELECCIONA AL MENOS 1 CONTACTO");
+            }
+            $valorRecordatorio = $service->save($valores);
+            foreach ($contactos as $contacto) {
+                $contacto["recordatorio_id"] = $valorRecordatorio;
+                $service->guardarRelacion($contacto);
+            }
+            $response->setMessage("El recordatorio se registro correctamente");
+            $response->send();
+        } catch (\Exception $e) {
+            $response->setError($e->getMessage());
+            $response->send();
         }
-        $response->send();
+        
     }
     // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function edit(Request $request, Response $response): void{
@@ -75,21 +81,39 @@ final class RecordatorioController extends Controller implements InterfaceContro
         $service = new RecordatorioService();
         $valores = $request->getData();
         //guardar recordatorio
-        $service->update($valores);
-        $response->setMessage("El recordatorio se actualizo correctamente");
-        //elimino relaciones anteriores
-        $service->eliminarRelacion($valores["id"]);
-        //guardo nuevas relaciones
-        $contactos = $valores["contactos"];
-        foreach ($contactos as $contacto) {
-            $contacto["recordatorio_id"] = $valores["id"];
-            $service->guardarRelacion($contacto);
+        try {
+            $contactos = $valores["contactos"];
+            if (empty($contactos)) {
+                throw new \Exception("SELECCIONA AL MENOS 1 CONTACTO");
+            }
+            $service->update($valores);
+            $response->setMessage("El recordatorio se actualizo correctamente");
+            $service->eliminarRelacion($valores["id"]);
+            foreach ($contactos as $contacto) {
+                $contacto["recordatorio_id"] = $valores["id"];
+                $service->guardarRelacion($contacto);
+            }
+            $response->send();
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
         }
-        $response->send();
+        
     }
     //GESTIONA LA ELIMINACION DE UNA ENTIDAD DEL SISTEMA
     public function delete(Request $request, Response $response): void{
-        
+        $service = new RecordatorioService();
+        try {
+            $service->deleteRecordatorio($request->getId(), $_SESSION["id"]);
+            $response->setMessage("El recordatorio se elimino correctamente");
+            $response->send();
+        } catch (\Exception $e) {
+            if ($e->getMessage() === "RECORDATORIO NO ENCONTRADO") {
+                $response->setError("No se encontro el recordatorio.");
+            } elseif ($e->getMessage() === "ACCION DENEGADA") {
+                $response->setError("No se puede realizar esta accion.");
+            }
+            $response->send();
+        }
     }
 
     public function pdf(Request $request, Response $response){
