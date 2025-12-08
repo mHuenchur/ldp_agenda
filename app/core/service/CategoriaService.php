@@ -16,7 +16,15 @@ final class CategoriaService extends Service implements InterfaceService{
     public function save(array $object): void{
         $conn = Connection::get();
         $dao = new CategoriaDAO($conn);
-        $dao->save(new CategoriaDTO($object));
+        $categoria = new CategoriaDTO($object);
+        $categoria->setUsuarioId($_SESSION["id"]);
+        if ($categoria->getNombre() == "") {
+            throw new \Exception("Campo nombre vacio");
+        }
+        if ($categoria->getUsuarioId() == "0") {
+            throw new \Exception("usuario id cero");
+        }
+        $dao->save($categoria);
     }
 
     public function load($id): InterfaceDTO{
