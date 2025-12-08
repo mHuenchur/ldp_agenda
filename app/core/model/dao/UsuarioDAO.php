@@ -85,7 +85,7 @@ final class UsuarioDAO extends DAO implements InterfaceDAO
         return array();
     }
 
-    public function emailCheck($email): string
+    public function emailCheck($email): ?string
     {
         $sql = "SELECT usuario.id FROM {$this->table} WHERE usuario.email = '{$email}'";
         $stmt = $this->conn->prepare($sql);
@@ -106,6 +106,34 @@ final class UsuarioDAO extends DAO implements InterfaceDAO
         $stmt = $this->conn->prepare($sql);
 
         $stmt->execute();
+    }
+
+    public function existeUsuarioEmail($nombreUsuario, $correo){
+        $sql = "SELECT 1 
+                FROM usuario 
+                WHERE nombre_usuario = :user OR email = :correo
+                LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "user" => $nombreUsuario,
+            "correo" => $correo,
+        ]);
+        return (bool)$stmt->fetchColumn();
+    }
+
+    public function existeUsuarioEmailOtroUsuario($id, $nombreUsuario, $correo){
+        $sql = "SELECT 1 
+                FROM usuario 
+                WHERE id <> :id
+                  AND (nombre_usuario = :user OR email = :correo)
+                LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "id" => $id,
+            "user" => $nombreUsuario,
+            "correo" => $correo,
+        ]);
+        return (bool)$stmt->fetchColumn();
     }
 
 }
