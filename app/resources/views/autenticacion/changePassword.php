@@ -1,19 +1,32 @@
-<div class="card w-25 mb-3 mx-auto mt-5">
-    <div class="card-header">
-        Recuperación de clave
-    </div>
-    <div class="card-body">
-        <div class="">
-            <label for="datoCorreo" class="form-label">Correo</label>
-            <input type="email" class="form-control" id="datoCorreo" placeholder="name@example.com" aria-describedby="emailHelpBlock" required>
-            <div id="emailHelpBlock" class="form-text mt-2">
-                Ingresa tu dirección de correo del sitio para cambiar tu contraseña.
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-header">
+            Recuperación de clave
             </div>
+            <div class="card-body">
+            <form id="">
+                <div class="mb-3">
+                <label for="datoCorreo" class="form-label">Correo</label>
+                <input
+                    type="email"
+                    class="form-control"
+                    id="datoCorreo"
+                    placeholder="name@example.com">
+                <div class="form-text">
+                    Ingresa tu dirección de correo del sitio para cambiar tu contraseña.
+                </div>
+                </div>
+
+                <div class="d-flex justify-content-between gap-2">
+                <a href="autenticacion/index" class="btn btn-outline-secondary w-50">Volver</a>
+                <button type="button" onclick="autenticacionController.passwordReset()" class="btn btn-primary w-50">Confirmar</button>
+                </div>
+            </form>
+            </div>
+
         </div>
-    </div>
-    <div class="card-footer text-body-secondary">
-        <div>
-            <button type="submit" class="btn btn-primary" onclick="autenticacionController.passwordReset()">Confirmar</button>
         </div>
     </div>
 </div>
