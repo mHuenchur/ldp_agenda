@@ -22,11 +22,7 @@
                 require_once APP_TEMPLATE . "includes/administradorHeader.php";
             }
         }
-    }/*else {
-        if ($this->view != "autenticacion/logout.php") {
-            require_once APP_TEMPLATE . "includes/autenticacionHeader.php";
-        }
-    }*/
+    }
 
     ?>
     </header>
