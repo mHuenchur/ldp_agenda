@@ -53,16 +53,26 @@ final class UsuarioController extends Controller implements InterfaceController{
     public function update(Request $request, Response $response): void{
         $service = new UsuarioService();
         $valores = $request->getData();
-        $service->update($valores);
-        $response->setMessage("se actualizo el usuario");
-        $response->send();
+        try {
+            $service->update($valores);
+            $response->setMessage("se actualizó el usuario.");
+            $response->send();
+        } catch (\Exception $e) {
+            $response->setError($e->getMessage());
+            $response->send();
+        }
     }
     public function updateClave(Request $request, Response $response){
         $service = new UsuarioService();
         $valores = $request->getData();
-        $service->updateClave($valores);
-        $response->setMessage("se actualizo el usuario");
-        $response->send();
+        try {
+            $service->updateClave($valores);
+            $response->setMessage("se actualizo la contraseña.");
+            $response->send();
+        } catch (\Exception $e) {
+            $response->setError($e->getMessage());
+            $response->send();
+        }
     }
     //GESTIONA LA ELIMINACION DE UNA ENTIDAD DEL SISTEMA
     public function delete(Request $request, Response $response): void{
