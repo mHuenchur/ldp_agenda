@@ -14,70 +14,126 @@
       </div>
     </section>
 
-    <!-- Listado -->
-    <table id="TableRecordatorioVigente" class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Fecha y Hora</th>
-          <th scope="col">Lugar</th>
-          <th scope="col">Opciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php
-        if (!empty($listadoVigentes)) {
-          $html = "";
-          $count = 1;
-          foreach ($listadoVigentes as $recordatorio) {
-            $row = '<tr>';
-            $row .= '<th scope="row">'. $count .'</th>';
-            $row .= '<td>'. $recordatorio["nombre"] .'</td>';
-            $row .= '<td>'. date('d/m/Y H:i', strtotime($recordatorio["fecha_hora"])) .'</td>';
-            $row .= '<td>'. $recordatorio["lugar"] .'</td>';
-            $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="recordatorio/edit/'. $recordatorio["id"] .'">Ver detalles</a><a id="" class="btn btn-danger mx-1" href="">Eliminar</a>' .'</td>';
-            $row .= '</tr>';
-            $html .= $row;
-            $count++;
+    <div class="table-responsive">
+      <!-- Listado vigentes-->
+       <h2 class="h5 text-center mt-3 text-muted">Recordatorios vigentes</h2>
+      <table id="TableRecordatorioVigente" class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Fecha y Hora</th>
+            <th scope="col">Lugar</th>
+            <th scope="col">Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          if (!empty($listadoVigentes)) {
+            $html = "";
+            $count = 1;
+            foreach ($listadoVigentes as $recordatorio) {
+              $row = '<tr>';
+              $row .= '<th scope="row">'. $count .'</th>';
+              $row .= '<td>'. $recordatorio["nombre"] .'</td>';
+              $row .= '<td>'. date('d/m/Y H:i', strtotime($recordatorio["fecha_hora"])) .'</td>';
+              $row .= '<td>'. $recordatorio["lugar"] .'</td>';
+              $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="recordatorio/edit/'. $recordatorio["id"] .'">Ver detalles</a>
+              <a id="" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#'. $recordatorio["id"]. '">Eliminar</a>' .'</td>';
+              $row .= '</tr>';
+              $row .= '<div class="modal fade" id="'. $recordatorio["id"] .'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered ">
+                        <div class="modal-content text-danger-emphasis bg-danger-subtle border border-danger-subtle">
+                          <div class="modal-header border-danger-subtle">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar recordatorio</h1>
+                          </div>
+                          <div class="modal-body border-danger-subtle">
+                            <p>Esta seguro que desea eliminar el recordatorio: '. $recordatorio["nombre"].'?</p>
+                          </div>
+                          <div class="modal-footer border-danger-subtle">
+                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger" onclick=recordatorioController.deleteRecordatorio('.$recordatorio["id"].')>Eliminar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>';
+              $html .= $row;
+              $count++;
+            }
+            echo $html;
           }
-          echo $html;
-        }
-        ?>
-      </tbody>
-    </table>
+          ?>
+        </tbody>
+      </table>
+    </div>
 
-    <table id="TableRecordatorioVencido" class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Descripción</th>
-          <th scope="col">Fecha y Hora</th>
-          <th scope="col">Lugar</th>
-          <th scope="col">Opciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php
-        if (!empty($listadoVencidos)) {
-          $html = "";
-          $count = 1;
-          foreach ($listadoVencidos as $recordatorio) {
-            $row = '<tr>';
-            $row .= '<th scope="row">'. $count .'</th>';
-            $row .= '<td>'. $recordatorio["nombre"] .'</td>';
-            $row .= '<td>'. date('d/m/Y H:i', strtotime($recordatorio["fecha_hora"])) .'</td>';
-            $row .= '<td>'. $recordatorio["lugar"] .'</td>';
-            $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="recordatorio/edit/'. $recordatorio["id"] .'">Ver detalles</a><a id="" class="btn btn-danger mx-1" href="">Eliminar</a>' .'</td>';
-            $row .= '</tr>';
-            $html .= $row;
-            $count++;
+    <div class="table-responsive">
+      <!-- Listado vencidos-->
+       <h2 class="h5 text-center text-muted">Recordatorios vencidos</h2>
+      <table id="TableRecordatorioVencido" class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Fecha y Hora</th>
+            <th scope="col">Lugar</th>
+            <th scope="col">Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          if (!empty($listadoVencidos)) {
+            $html = "";
+            $count = 1;
+            foreach ($listadoVencidos as $recordatorio) {
+              $row = '<tr>';
+              $row .= '<th scope="row">'. $count .'</th>';
+              $row .= '<td>'. $recordatorio["nombre"] .'</td>';
+              $row .= '<td>'. date('d/m/Y H:i', strtotime($recordatorio["fecha_hora"])) .'</td>';
+              $row .= '<td>'. $recordatorio["lugar"] .'</td>';
+              $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="recordatorio/edit/'. $recordatorio["id"] .'">Ver detalles</a>
+              <a id="" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#'. $recordatorio["id"]. '">Eliminar</a>' .'</td>';
+              $row .= '</tr>';
+              $row .= '<div class="modal fade" id="'. $recordatorio["id"] .'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered ">
+                        <div class="modal-content text-danger-emphasis bg-danger-subtle border border-danger-subtle">
+                          <div class="modal-header border-danger-subtle">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar recordatorio</h1>
+                          </div>
+                          <div class="modal-body border-danger-subtle">
+                            <p>Esta seguro que desea eliminar el recordatorio: '. $recordatorio["nombre"].'?</p>
+                          </div>
+                          <div class="modal-footer border-danger-subtle">
+                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger" onclick=recordatorioController.deleteRecordatorio('.$recordatorio["id"].')>Eliminar</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>';
+              $html .= $row;
+              $count++;
+            }
+            echo $html;
           }
-          echo $html;
-        }
-        ?>
-      </tbody>
-    </table>
+          ?>
+        </tbody>
+      </table>
+    </div>
+    
+    
+  </div>
+</div>
+
+
+<!-- TOAST ALERT -->
+<div class="toast-container p-3 position-fixed top-0 start-50 translate-middle-x">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">ATENCION</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div id="messageContainer" class="toast-body">
+    </div>
   </div>
 </div>
 
