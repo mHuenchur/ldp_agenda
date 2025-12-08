@@ -50,7 +50,8 @@
     </section>
 
 
-    <table id="myTable" class="table">
+    <div class="table-responsive">
+      <table id="myTable" class="table">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -78,7 +79,7 @@
         }
         $row .= '<td>'. $contacto["direccion"] .'</td>';
         $row .= '<td>'. $contacto["email"] .'</td>';
-        $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="contacto/edit/'. $contacto["id"]. '">Modificar</a><a id="" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#'. $contacto["id"]. '">Eliminar</a>' .'</td>';
+        $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="contacto/edit/'. $contacto["id"]. '">Ver detalles</a><a id="" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#'. $contacto["id"]. '">Eliminar</a>' .'</td>';
         $row .= '</tr>';
         $row .= '<div class="modal fade" id="'. $contacto["id"] .'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered ">
@@ -104,5 +105,19 @@
     ?>
   </tbody>
 </table>
+    </div>
+
+    
+  </div>
+</div>
+
+<div class="toast-container p-3 position-fixed top-0 start-50 translate-middle-x">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">ATENCION</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div id="messageContainer" class="toast-body">
+    </div>
   </div>
 </div>
