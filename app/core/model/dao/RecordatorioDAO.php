@@ -53,7 +53,11 @@ final class RecordatorioDAO extends DAO implements InterfaceDAO
 
     public function delete($id): void
     {
-        
+        $sql = "DELETE FROM recordatorio WHERE id = :rid;";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "rid" => $id,
+        ]);
     }
 
     public function list(): array
@@ -124,6 +128,21 @@ final class RecordatorioDAO extends DAO implements InterfaceDAO
         $stmt->execute([
             "rid" => $id,
         ]);
+    }
+    
+    public function findById($rid): ?InterfaceDTO
+    {
+        $sql = "SELECT `id`, `nombre`, `fecha_hora`, `lugar`, `usuario_id` FROM `recordatorio` 
+                WHERE id = :rid";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([
+            "rid" => $rid,
+        ]);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) {
+            return null;
+        }
+        return new RecordatorioDTO($row);
     }
 
 }
