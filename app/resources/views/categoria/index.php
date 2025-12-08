@@ -12,57 +12,70 @@
       </div>
     </section>
 
-    <!-- Listado -->
-    <table id="TableCategoria" class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Opciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php
-        if (!empty($listadoCategorias)) {
-          $html = "";
-          $count = 1;
-          foreach ($listadoCategorias as $categoria) {
-            $row = '<tr>';
-            $row .= '<th scope="row">'. $count .'</th>';
-            $row .= '<td>'. $categoria["nombre"] .'</td>';
-            $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="categoria/edit/'. $categoria["id"].'">Ver detalles</a><a id="" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#'. $categoria["id"]. '">Eliminar</a>' .'</td>';
-            $row .= '</tr>';
-            $row .= '<div class="modal fade" id="'. $categoria["id"] .'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered ">
-                      <div class="modal-content text-danger-emphasis bg-danger-subtle border border-danger-subtle">
-                        <div class="modal-header border-danger-subtle">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar categoria</h1>
-                        </div>
-                        <div class="modal-body border-danger-subtle">
-                          <p>Esta seguro que desea eliminar la categoria '. $categoria["nombre"].'?</p>
-                        </div>
-                        <div class="modal-footer border-danger-subtle">
-                          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
-                          <button type="button" class="btn btn-danger" onclick=categoriaController.deleteCategoria('.$categoria["id"].')>Eliminar</button>
+    <div class="table-responsive">
+      <!-- Listado -->
+      <table id="TableCategoria" class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          if (!empty($listadoCategorias)) {
+            $html = "";
+            $count = 1;
+            foreach ($listadoCategorias as $categoria) {
+              $row = '<tr>';
+              $row .= '<th scope="row">'. $count .'</th>';
+              $row .= '<td>'. $categoria["nombre"] .'</td>';
+              $row .= '<td>'. '<a id="" class="btn btn-warning mx-1" href="categoria/edit/'. $categoria["id"].'">Ver detalles</a><a id="" class="btn btn-danger mx-1" data-bs-toggle="modal" data-bs-target="#'. $categoria["id"]. '">Eliminar</a>' .'</td>';
+              $row .= '</tr>';
+              $row .= '<div class="modal fade" id="'. $categoria["id"] .'" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered ">
+                        <div class="modal-content text-danger-emphasis bg-danger-subtle border border-danger-subtle">
+                          <div class="modal-header border-danger-subtle">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Eliminar categoria</h1>
+                          </div>
+                          <div class="modal-body border-danger-subtle">
+                            <p>Esta seguro que desea eliminar la categoria '. $categoria["nombre"].'?</p>
+                          </div>
+                          <div class="modal-footer border-danger-subtle">
+                            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-danger" onclick=categoriaController.deleteCategoria('.$categoria["id"].')>Eliminar</button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>';
-            $html .= $row;
-            $count++;
+                    </div>';
+              $html .= $row;
+              $count++;
+            }
+            echo $html;
           }
-          echo $html;
-        }
-        ?>
-      </tbody>
-    </table>
+          ?>
+        </tbody>
+      </table>
+    </div>
+    
   </div>
 </div>
 
+<div class="toast-container p-3 position-fixed top-0 start-50 translate-middle-x">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">ATENCION</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div id="messageContainer" class="toast-body">
+    </div>
+  </div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="categoriaModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="modalLabel">Nueva categoria</h1>
@@ -77,7 +90,6 @@
             </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             <button id="btnNuevaCategoria" type="button" class="btn btn-primary">Guardar</button>
           </div>
         </form>
@@ -85,3 +97,6 @@
       </div>
   </div>
 </div>
+
+
+<!-- TOAST ALERT -->
