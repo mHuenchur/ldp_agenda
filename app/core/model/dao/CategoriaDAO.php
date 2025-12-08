@@ -52,12 +52,10 @@ final class CategoriaDAO extends DAO implements InterfaceDAO
                     SELECT 1
                     FROM contacto
                     WHERE categoria_id = :cid
-                    OR usuario_id != :uid
                 ) AS tiene_contactos;";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([
             "cid" => $categoriaId,
-            "uid" => $_SESSION["id"],
         ]);
         return (bool)$stmt->fetchColumn();
     }
