@@ -27,7 +27,7 @@
   </div>
   <div class="col-sm-6">
     <div class="card">
-        <form id="formularioAltaUsuario" class="my-4" action="" method="post">
+        <form id="formularioAltaUsuario" class="my-4" action="" method="">
             <div class="card-header">
                 Registrarse
             </div>
@@ -60,7 +60,16 @@
     </div>
   </div>
 </div>
-    
+</div>
 
-    
+<!-- TOAST ALERT -->
+<div class="toast-container p-3 position-fixed top-0 start-50 translate-middle-x">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">ATENCION</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div id="messageContainer" class="toast-body">
+    </div>
+  </div>
 </div>
