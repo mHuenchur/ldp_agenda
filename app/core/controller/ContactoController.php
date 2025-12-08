@@ -52,16 +52,15 @@ final class ContactoController extends Controller implements InterfaceController
         $service = new ContactoService();
         $valores = $request->getData();
         $valores["usuario"] = $_SESSION["id"];
-        $valorContacto = $service->save($valores);
-        $response->setMessage("El contacto se registro correctamente");
-        //GUARDAR LOS TELEFONOS
-        $serviceTelefono = new TelefonoService();
-        $telefonos = $valores["telefonos"];
-        foreach ($telefonos as $telefono) {
-            $telefono["contacto_id"] = $valorContacto;
-            $serviceTelefono->save($telefono);
+        try {
+            $service->save($valores);
+            $response->setMessage("El contacto se registro correctamente");
+            $response->send();
+        } catch (\Exception $e) {
+            $response->setError($e->getMessage());
+            $response->send();
         }
-        $response->send();
+        
     }
     // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function edit(Request $request, Response $response): void{
@@ -112,7 +111,7 @@ final class ContactoController extends Controller implements InterfaceController
             if ($e->getMessage() === "ACCION DENEGADA") {
                 $response->setError("No se puede eliminar el contacto porque hay recordatorios que lo utilizan.");
             } else {
-                $response->setError("No se puede eliminar el contacto.");
+                $response->setError($e->getMessage());
             }
             $response->send();
         }
