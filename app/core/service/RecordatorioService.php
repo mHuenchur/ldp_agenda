@@ -8,14 +8,24 @@ use app\core\model\dto\RecordatorioDTO;
 use app\core\service\base\Service;
 use app\core\service\base\InterfaceService;
 use app\libs\connection\Connection;
-
+use Exception;
 
 final class RecordatorioService extends Service implements InterfaceService{
     
     public function save(array $object){
         $conn = Connection::get();
         $dao = new RecordatorioDAO($conn);
-        return $dao->save(new RecordatorioDTO($object));
+        $recordatorio = new RecordatorioDTO($object);
+        if ($recordatorio->getNombre() == "") {
+            throw new \Exception("NOMBRE");
+        }
+        if ($recordatorio->getFechaHora() == "") {
+            throw new \Exception("FECHA-HORA");
+        }
+        if ($recordatorio->getLugar() == "") {
+            throw new \Exception("LUGAR");
+        }
+        return $dao->save($recordatorio);
     }
 
     public function load($id): InterfaceDTO{
@@ -27,7 +37,40 @@ final class RecordatorioService extends Service implements InterfaceService{
     public function update(array $object): void{
         $conn = Connection::get();
         $dao = new RecordatorioDAO($conn);
-        $dao->update(new RecordatorioDTO($object));
+        $recordatorio = new RecordatorioDTO($object);
+        if ($recordatorio->getNombre() == "") {
+            throw new \Exception("NOMBRE");
+        }
+        if ($recordatorio->getFechaHora() == "") {
+            throw new \Exception("FECHA-HORA");
+        }
+        if ($recordatorio->getLugar() == "") {
+            throw new \Exception("LUGAR");
+        }
+        if ($recordatorio->getId() == "") {
+            throw new \Exception("ID");
+        }
+        $dao->update($recordatorio);
+    }
+
+    public function deleteRecordatorio($rid, $uid){
+        $conn = Connection::get();
+        $dao = new RecordatorioDAO($conn);
+
+        $recordatorio = $dao->findById($rid);
+        $valor = $recordatorio->toArray();
+        if ($recordatorio == null) {
+            throw new \Exception("RECORDATORIO NO ENCONTRADO");
+        }
+
+        $recordatorioId = (int)$recordatorio->getUsuarioId();
+        $usuarioId = (int)$uid;
+        if ($recordatorioId !== $usuarioId) {
+            throw new \Exception("ACCION DENEGADA");
+        }
+
+        $dao->eliminarRelacion($rid);
+        $dao->delete($rid);
     }
 
     public function delete($id): void{
