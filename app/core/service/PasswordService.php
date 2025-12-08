@@ -33,7 +33,7 @@ final class PasswordService extends Service implements InterfaceService{
         return [];
     }
     
-    public function emailCheck($email): string{
+    public function emailCheck($email): ?string{
         $conn = Connection::get();
         $dao = new UsuarioDAO($conn);
         return $dao->emailCheck($email);
