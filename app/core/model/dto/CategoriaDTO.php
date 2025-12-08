@@ -16,23 +16,21 @@ public function __construct($data = [])
     $this->setUsuarioId($data["usuario_id"] ?? "");
 }
 
-public function getId(): int{
+public function getId(){
     return $this->id;
 }
 public function getNombre(): string{
     return $this->nombre;
 }
-public function getUsuarioId(): int{
+public function getUsuarioId(){
     return $this->id_usuario;
 }
 
 //
 
 public function setId($id): void{
-    $this->id =
-    (is_numeric($id) && $id > "0") 
-    ? $id 
-    : "0";
+    $id = (int)$id;
+    $this->id = $id > 0 ? $id : 0;
 }
 public function setNombre($nombre): void{
     $this->nombre =
@@ -41,10 +39,8 @@ public function setNombre($nombre): void{
     : "";
 }
 public function setUsuarioId($user): void{
-    $this->id_usuario =
-    (is_numeric($user) && $user > 0) 
-    ? $user 
-    : 5;
+    $user = (int)$user;
+    $this->id_usuario = $user > 0 ? $user : 0;
 }
 
 
