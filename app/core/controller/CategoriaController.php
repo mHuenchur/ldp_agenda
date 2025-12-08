@@ -21,6 +21,7 @@ final class CategoriaController extends Controller implements InterfaceControlle
     // BUSCA EL INICIO DE LA VISTA CORRESPONDIENTE
     public function index(Request $request, Response $response): void{
         $service = new CategoriaService();
+        $this->scripts[] = "public/app/js/categoria/listado.js";
         $listadoCategorias = $service->list();
         $this->view = "categoria/index.php";
         require_once APP_TEMPLATE . "template.php";
@@ -35,12 +36,17 @@ final class CategoriaController extends Controller implements InterfaceControlle
     }
     // GESTIONA EL GUARDADO DE UNA NUEVA ENTIDAD EN EL SISTEMA
     public function save(Request $request, Response $response): void{
-        $service = new CategoriaService();
-        $valores = $request->getData();
-        $valores["usuario_id"] = $_SESSION["id"];
-        $service->save($valores);
-        $response->setMessage("La categoria se registró correctamente");
-        $response->send();
+        try {
+            $service = new CategoriaService();
+            $valores = $request->getData();
+            $service->save($valores);
+            $response->setMessage("La categoria se registró correctamente");
+            $response->send();
+        } catch (\Exception $e) {
+            $response->setError($e->getMessage());
+            $response->send();
+        }
+        
     }
     // BUSCA LA VISTA DE EDITAR UNA ENTIDAD EXISTENTE EN EL SISTEMA
     public function edit(Request $request, Response $response): void{
