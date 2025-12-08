@@ -16,7 +16,17 @@ final class TelefonoService extends Service implements InterfaceService{
     public function save(array $object){
         $conn = Connection::get();
         $dao = new TelefonoDAO($conn);
-        return $dao->save(new TelefonoDTO($object));
+        $telefono = new TelefonoDTO($object);
+        if ($telefono->getEtiqueta() == "") {
+            throw new \Exception("ALGUNA ETIQUETA VACIA");
+        }
+        if ($telefono->getNumero() == "") {
+            throw new \Exception("ALGUN NUMERO VACIO");
+        }
+        if ($telefono->getContactoId() == "") {
+            throw new \Exception("CONTACTO-TELEFONO");
+        }
+        return $dao->save($telefono);
     }
 
     public function load($id): InterfaceDTO{
