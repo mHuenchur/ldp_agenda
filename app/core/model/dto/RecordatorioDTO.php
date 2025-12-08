@@ -58,10 +58,7 @@ public function setLugar($lugar): void{
     : "";
 }
 public function setUsuarioId($usuario): void{
-    $this->usuario_id =
-    (is_numeric($usuario) && $usuario > "0") 
-    ? $usuario 
-    : "0";
+    $this->usuario_id = $usuario;
 }
 
 
