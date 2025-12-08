@@ -35,6 +35,7 @@ let contactoController = {
             contactoController.dataContacto.email = document.getElementById("email").value;
             contactoController.dataContacto.observaciones = document.getElementById("observaciones").value;
 
+            contactoController.dataContacto.telefonos = []
             for (const fila of list.querySelectorAll('.fila')) {
                 const etiqueta = fila.querySelector('[name="etiqueta"]').value.trim();
                 const numero = fila.querySelector('[name="numero"]').value.trim();
@@ -45,9 +46,12 @@ let contactoController = {
             contactoService.saveContacto(contactoController.dataContacto)
             .then(response => {
                 if(response.error === ""){
-                    console.log(response.mensaje);
+                    contactoController.showMessage(response.mensaje)
+                    setTimeout(() => {
+                        window.location.href= "contacto/index";
+                    }, 2000);
                 }else{
-                    console.log("NO SE PUDO GUARDAR");
+                    contactoController.showMessage(response.error);
                 }
             })
         } else {
@@ -70,6 +74,7 @@ let contactoController = {
             contactoController.dataContacto.email = document.getElementById("email").value;
             contactoController.dataContacto.observaciones = document.getElementById("observaciones").value;
 
+            contactoController.dataContacto.telefonos = [];
             for (const fila of list.querySelectorAll('.fila')) {
                 const etiqueta = fila.querySelector('[name="etiqueta"]').value.trim();
                 const numero = fila.querySelector('[name="numero"]').value.trim();
@@ -80,9 +85,12 @@ let contactoController = {
             contactoService.updateContacto(contactoController.dataContacto)
             .then(response => {
                 if(response.error === ""){
-                    console.log(response.mensaje);
+                    contactoController.showMessage(response.mensaje);
+                    setTimeout(() => {
+                        window.location.href= "contacto/index";
+                    }, 2000);
                 }else{
-                    console.log("NO SE PUDO GUARDAR");
+                    contactoController.showMessage(response.error);
                 }
             })
         } else {
@@ -93,9 +101,12 @@ let contactoController = {
         contactoService.deleteContacto($id)
         .then(response => {
             if(response.error === ""){
-                console.log(response.mensaje);
+                contactoController.showMessage(response.mensaje);
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
             }else{
-                console.log(response.error);
+                contactoController.showMessage(response.error);
             }
         })
     },
@@ -149,5 +160,12 @@ let contactoController = {
                     console.log("NO");
                 }
             })
+    },
+    showMessage: (respuesta) => {
+        const toastLiveExample = document.getElementById('liveToast')
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+        const message = document.getElementById("messageContainer");
+        message.innerHTML = respuesta;
+        toastBootstrap.show();
     }
 }

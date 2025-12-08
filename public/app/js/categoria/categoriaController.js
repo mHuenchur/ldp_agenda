@@ -4,20 +4,45 @@ let categoriaController = {
         nombre: "",
         usuario_id: ""
     },
+    guardando: false,
     saveCategoria: () => {
-        if(categoriaController.checkInputs()){
-            categoriaController.dataCategoria.nombre = document.getElementById("inputNombreCategoria").value;
-            categoriaService.saveCategoria(categoriaController.dataCategoria)
-            .then(response => {
-                if(response.error === ""){
-                    setTimeout(() => {
-                        location.reload();
-                    }, 3000);
-                }else{
-                    console.log("NO");
-                }
-            })
+
+        if (categoriaController.guardando) {
+            return;
         }
+
+        let nombre = document.getElementById("inputNombreCategoria").value.trim();
+        if (nombre === "") {
+            categoriaController.showMessage("El nombre de la categoria no puede estar vacio.");
+            return;
+        }
+
+        categoriaController.dataCategoria.nombre = nombre;
+
+        categoriaController.guardando = true;
+
+        btnNew.disabled = true;
+        btnNew.textContent = "Guardando...";
+
+        categoriaService.saveCategoria(categoriaController.dataCategoria)
+        .then(response => {
+            if(response.error === ""){
+                const myModalEl = document.getElementById('categoriaModal');
+                const modalInstance = bootstrap.Modal.getOrCreateInstance(myModalEl);
+                modalInstance.hide();
+                categoriaController.showMessage(response.mensaje)
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }else{
+                categoriaController.showMessage(response.error)
+            }
+        }).finally(() => {
+            categoriaController.guardando = false;
+
+            btnNew.disabled = false;
+            btnNew.textContent = "Guardar";
+        });
     },
     updateCategoria: () => {
         categoriaController.dataCategoria.id = document.getElementById("categoriaId").value;
@@ -25,12 +50,12 @@ let categoriaController = {
         categoriaService.updateCategoria(categoriaController.dataCategoria)
         .then(response => {
             if(response.error === ""){
-                console.log(response.mensaje);
+                categoriaController.showMessage(response.mensaje)
                 setTimeout(() => {
                     location.reload();
-                }, 3000);
+                }, 2000);
             }else{
-                console.log("NO");
+                categoriaController.showMessage(response.error)
             }
         })
     },
@@ -38,9 +63,12 @@ let categoriaController = {
         categoriaService.deleteCategoria($id)
         .then(response => {
             if(response.error === ""){
-                console.log(response.mensaje);
+                categoriaController.showMessage(response.mensaje);
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
             }else{
-                console.log(response.error);
+                categoriaController.showMessage(response.error);
             }
         })
     },
@@ -53,7 +81,11 @@ let categoriaController = {
         return true;
     },
     showMessage: (respuesta) => {
-        console.log(respuesta);
+        const toastLiveExample = document.getElementById('liveToast')
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+        const message = document.getElementById("messageContainer");
+        message.innerHTML = respuesta;
+        toastBootstrap.show();
     }
 }
 

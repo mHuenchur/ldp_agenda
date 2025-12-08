@@ -15,7 +15,8 @@ let recordatorioController = {
             recordatorioController.dataRecordatorio.nombre = document.getElementById("inputDescripcion").value;
             recordatorioController.dataRecordatorio.fecha_hora = document.getElementById("inputFechaHora").value;
             recordatorioController.dataRecordatorio.lugar = document.getElementById("inputLugar").value;
-
+            recordatorioController.dataRecordatorio.contactos = [];
+            
             [...select.selectedOptions].forEach(o => {
             const id = Number(o.value);
             if (Number.isFinite(id)) {
@@ -25,9 +26,12 @@ let recordatorioController = {
             recordatorioService.saveRecordatorio(recordatorioController.dataRecordatorio)
             .then(response => {
                 if(response.error === ""){
-                    console.log(response.mensaje);
+                    recordatorioController.showMessage(response.mensaje);
+                    setTimeout(() => {
+                        window.location.href= "recordatorio/index";
+                    }, 2000);
                 }else{
-                    console.log("NO SE PUDO GUARDAR");
+                    recordatorioController.showMessage(response.error);
                 }
             })
         }
@@ -39,6 +43,7 @@ let recordatorioController = {
             recordatorioController.dataRecordatorio.nombre = document.getElementById("descripcion").value;
             recordatorioController.dataRecordatorio.fecha_hora = document.getElementById("fecha_hora").value;
             recordatorioController.dataRecordatorio.lugar = document.getElementById("lugar").value;
+            recordatorioController.dataRecordatorio.contactos = [];
 
             [...select.selectedOptions].forEach(o => {
             const id = Number(o.value);
@@ -49,14 +54,37 @@ let recordatorioController = {
             recordatorioService.updateRecordatorio(recordatorioController.dataRecordatorio)
             .then(response => {
                 if(response.error === ""){
-                    console.log(response.mensaje);
+                    recordatorioController.showMessage(response.mensaje);
+                    setTimeout(() => {
+                        window.location.href= "recordatorio/index";
+                    }, 2000);
                 }else{
-                    console.log("NO SE PUDO GUARDAR");
+                    recordatorioController.showMessage(response.error);
                 }
             })
         }
     },
+    deleteRecordatorio: ($id) => {
+        recordatorioService.deleteRecordatorio($id)
+        .then(response => {
+            if(response.error === ""){
+                recordatorioController.showMessage(response.mensaje);
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }else{
+                recordatorioController.showMessage(response.error);
+            }
+        })
+    },
     validacion: () => {
         return true;
+    },
+    showMessage: (respuesta) => {
+        const toastLiveExample = document.getElementById('liveToast')
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+        const message = document.getElementById("messageContainer");
+        message.innerHTML = respuesta;
+        toastBootstrap.show();
     }
 }

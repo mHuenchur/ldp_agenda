@@ -24,9 +24,12 @@ let usuarioController = {
             usuarioService.updateUsuario(usuarioController.dataUsuario)
             .then(response => {
                 if(response.error === ""){
-                    console.log(response.mensaje);
+                    usuarioController.showMessage(response.mensaje);
+                    setTimeout(() => {
+                    location.reload();
+                    }, 2000);
                 }else{
-                    console.log("NO SE PUDO GUARDAR");
+                    usuarioController.showMessage(response.error);
                 }
             })
         }
@@ -35,23 +38,33 @@ let usuarioController = {
         return true;
     },
     updateClave: () => {
-        $claveActual = document.getElementById("passActual").value;
-        $claveNueva = document.getElementById("passNueva").value;
-        $claveConfirmar = document.getElementById("passConfirmar").value;
-        if ($claveNueva == $claveConfirmar) {
+        $claveActual = document.getElementById("passActual").value.trim();
+        $claveNueva = document.getElementById("passNueva").value.trim();
+        $claveConfirmar = document.getElementById("passConfirmar").value.trim();
+        if ($claveActual != "" && $claveNueva != "" && $claveConfirmar != "" && ($claveNueva == $claveConfirmar)) {
             usuarioController.dataClave.clave = $claveActual;
             usuarioController.dataClave.nueva = $claveNueva;
 
             usuarioService.updateClave(usuarioController.dataClave)
             .then(response => {
                 if(response.error === ""){
-                    console.log(response.mensaje);
+                    usuarioController.showMessage(response.mensaje);
+                    setTimeout(() => {
+                    location.reload();
+                    }, 2000);
                 }else{
-                    console.log("NO SE PUDO ACTUALIZAR");
+                    usuarioController.showMessage(response.error);
                 }
             })
         } else {
-            console.log("valores incorrectos...");
+            usuarioController.showMessage("Campos vacios o incorrectos.");
         }
+    },
+    showMessage: (respuesta) => {
+        const toastLiveExample = document.getElementById('liveToast')
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+        const message = document.getElementById("messageContainer");
+        message.innerHTML = respuesta;
+        toastBootstrap.show();
     }
 }
