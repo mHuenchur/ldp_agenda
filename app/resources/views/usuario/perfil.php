@@ -37,7 +37,7 @@
               </div>
 
               <div class="col-md-6">
-                <label for="usuarioTiempo" class="form-label">Tiempo de notificaciones</label>
+                <label for="usuarioTiempo" class="form-label">Tiempo de notificaciones (Dias)</label>
                 <input id="usuarioTiempo" name="usuarioTiempo" type="text" class="form-control" required minlength="2" maxlength="45" autocomplete="given-name" value="<?php echo $usuario["tiempo_notificacion"] ?>">
                 <div class="form-text">Modifica la anticipacion de los recordatorios.</div>
                 <div class="invalid-feedback">Ingresá un valor válido (mín. 2).</div>
@@ -70,7 +70,6 @@
             <div class="mb-3">
               <label for="passNueva" class="form-label">Nueva contraseña</label>
               <input id="passNueva" name="passNueva" type="password" class="form-control" required minlength="8" autocomplete="new-password">
-              <div class="form-text">Mínimo 8 caracteres.</div>
               <div class="invalid-feedback">Ingresá una contraseña válida.</div>
             </div>
 
@@ -88,5 +87,17 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- TOAST ALERT -->
+<div class="toast-container p-3 position-fixed top-0 start-50 translate-middle-x">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">ATENCION</strong>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div id="messageContainer" class="toast-body">
+    </div>
   </div>
 </div>
