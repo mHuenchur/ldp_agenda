@@ -58,8 +58,8 @@ final class ContactoDAO extends DAO implements InterfaceDAO
                     SELECT 1
                     FROM recordatorio_contacto rc
                     JOIN recordatorio r ON r.id = rc.recordatorio_id
-                    WHERE (rc.contacto_id = :cid
-                    AND r.usuario_id = :uid) OR r.usuario_id != :uid 
+                    WHERE rc.contacto_id = :cid
+                    AND r.usuario_id = :uid
                 ) AS tiene_recordatorios;";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([
